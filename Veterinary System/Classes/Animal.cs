@@ -8,7 +8,7 @@ namespace Veterinary_System.Classes
     public class Animal
     {
         public int iAnimalId { get; set; }
-        public string iAnimalNumber { get; set; }
+        public string strAnimalNumber { get; set; }
         public int? iUserId { get; set; }
         public string strName { get; set; }
         public string strSpecie { get; set; }

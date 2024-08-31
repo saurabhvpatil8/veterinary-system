@@ -13,9 +13,7 @@ namespace Veterinary_System.Doctor
     public partial class Dashboard : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
+        { }
 
         protected void btnAddNewCompounder_Click(object sender, EventArgs e)
         {
@@ -25,9 +23,8 @@ namespace Veterinary_System.Doctor
             {
                 string strName = txtName.Text.ToString().Trim();
                 string strEmail = txtEmail.Text.ToString().Trim();
-                string strPassword = txtPassword.Text.ToString().Trim();
 
-                int iResult = objUserADO.AddCompunder(strName, strEmail, strPassword, Constants.objUser.iHospitalId);
+                int iResult = objUserADO.AddCompunder(strName, strEmail, Constants.objUser.iHospitalId);
 
                 if (iResult > 0)
                 {
@@ -36,7 +33,7 @@ namespace Veterinary_System.Doctor
                 }
                 else
                 {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", "alert('Database error, Please try after sometime..!');");
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", "alert('Database error, Please try after some time..!');");
                     //not added, DB error maybee vroo
                 }
             }
@@ -47,17 +44,22 @@ namespace Veterinary_System.Doctor
                 return false;
             if (String.IsNullOrEmpty(txtEmail.Text.ToString().Trim()))
                 return false;
-            if (String.IsNullOrEmpty(txtPassword.Text.ToString().Trim()))
-                return false;
-
             return true;
         }
 
-        //Working codee just don't needed now
-        //[WebMethod]
-        //public static int? GetData()
-        //{
-        //    return Constants.iHospitalId;
-        //}
+        [WebMethod]
+        public static Permission GetPermissions()
+        {
+            return Constants.objPermission;
+        }
+
+        [WebMethod]
+        public static int AddDoctor(string strName, string strEmail)
+        {
+            UserADO objUserADO = new UserADO();
+            int iResult = objUserADO.AddDoctor(strName, strEmail, Constants.objUser.iHospitalId);
+
+            return iResult;
+        }
     }
 }

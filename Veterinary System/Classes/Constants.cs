@@ -16,6 +16,13 @@ namespace Veterinary_System.Classes
             set
             { HttpContext.Current.Session["User"] = value; }
         }
+        public static Permission objPermission
+        {
+            get
+            { return (Permission)HttpContext.Current.Session["Permission"]; }
+            set
+            { HttpContext.Current.Session["Permission"] = value; }
+        }
         public static AnimalData objAnimalData
         {
             get

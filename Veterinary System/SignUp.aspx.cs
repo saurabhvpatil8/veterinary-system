@@ -37,50 +37,47 @@ namespace Veterinary_System
 
                     if (strUserType.Equals("User"))
                     {
-                        //string strQuery1 = "INSERT INTO hospitals (name) VALUES (@name); select LAST_INSERT_ID();";
-                        //MySqlCommand sqlCommand = new MySqlCommand(strQuery1, objDBConfig.Database);
-                        //sqlCommand.Parameters.AddWithValue("@name", strHospitalName);
-
-                        //int iHospitalId = Convert.ToInt32(sqlCommand.ExecuteScalar());
-
-
-
+                        //insert into user table
                         string strQuery = "INSERT INTO users (fname, email, password, user_type) VALUES (@fname, @email, @password, @user_type);";
-
                         MySqlCommand sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
 
-                        // Add parameters and set their values
                         sqlCommand.Parameters.AddWithValue("@fname", strName);
                         sqlCommand.Parameters.AddWithValue("@email", strEmail);
                         sqlCommand.Parameters.AddWithValue("@password", strPassword);
                         sqlCommand.Parameters.AddWithValue("@user_type", strUserType);
 
-                        // Execute the command
                         iResult = sqlCommand.ExecuteNonQuery();
                     }
                     else
                     {
+                        //insert into hospital table
+                        string strQuery = "INSERT INTO hospitals (name) VALUES (@name); select LAST_INSERT_ID();";
+                        MySqlCommand sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
 
-                        string strQuery1 = "INSERT INTO hospitals (name) VALUES (@name); select LAST_INSERT_ID();";
-                        MySqlCommand sqlCommand = new MySqlCommand(strQuery1, objDBConfig.Database);
                         sqlCommand.Parameters.AddWithValue("@name", strHospitalName);
-
                         int iHospitalId = Convert.ToInt32(sqlCommand.ExecuteScalar());
 
+                        //insert into user table
+                        strQuery = "INSERT INTO users (fname, email, password, user_type, hospital_id) VALUES (@fname, @email, @password, @user_type, @hospital_id); select LAST_INSERT_ID();";
+                        sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
 
-
-                        string strQuery2 = "INSERT INTO users (fname, email, password, user_type, hospital_id) VALUES (@fname, @email, @password, @user_type, @hospital_id);";
-
-                        sqlCommand = new MySqlCommand(strQuery2, objDBConfig.Database);
-
-                        // Add parameters and set their values
                         sqlCommand.Parameters.AddWithValue("@fname", strName);
                         sqlCommand.Parameters.AddWithValue("@email", strEmail);
                         sqlCommand.Parameters.AddWithValue("@password", strPassword);
                         sqlCommand.Parameters.AddWithValue("@user_type", strUserType);
                         sqlCommand.Parameters.AddWithValue("@hospital_id", iHospitalId);
 
-                        // Execute the command
+                        int iUserId = Convert.ToInt32(sqlCommand.ExecuteScalar());
+
+                        //insert into permission table
+                        strQuery = "INSERT INTO permission (user_id, dashboard, permission, billing) VALUES (@user_id, @dashboard, @permission, @billing);";
+                        sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
+
+                        sqlCommand.Parameters.AddWithValue("@user_id", iUserId);
+                        sqlCommand.Parameters.AddWithValue("@dashboard", 1);
+                        sqlCommand.Parameters.AddWithValue("@permission", 1);
+                        sqlCommand.Parameters.AddWithValue("@billing", 1);
+
                         iResult = sqlCommand.ExecuteNonQuery();
                     }
 

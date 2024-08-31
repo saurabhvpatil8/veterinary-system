@@ -45,11 +45,18 @@
                         <span class="nav-link-text ms-1">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item" id="doctor_permissions">
-                    <%--<a class="nav-link text-white active bg-gradient-primary" href="#">--%>
-                    <a class="nav-link text-white" id="permission_link" href="Permission.aspx">
+                <li class="nav-item" id="doctor_diagnosis">
+                    <a class="nav-link text-white" id="diagnosis_link" href="Diagnosis.aspx">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">view_in_ar</i>
+                            <i class="material-icons opacity-10">healing</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Diagnosis</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="doctor_permissions">
+                    <a class="nav-link text-white" id="permission_link" href="Permissions.aspx">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">settings</i>
                         </div>
                         <span class="nav-link-text ms-1">Permissions</span>
                     </a>
@@ -64,18 +71,18 @@
                 </li>
             </ul>
             <ul class="navbar-nav" id="user_dashboard">
-                <li class="nav-item" id="user_home">
+                <li class="nav-item">
                     <a class="nav-link text-white" id="home_link" href="Home.aspx">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">dashboard</i>
+                            <i class="material-icons opacity-10">Home</i>
                         </div>
                         <span class="nav-link-text ms-1">Home</span>
                     </a>
                 </li>
-                <li class="nav-item" id="user_new_appointment">
+                <li class="nav-item">
                     <a class="nav-link text-white" id="user_new_appointment_link" href="Appointment.aspx">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="material-icons opacity-10">weekend</i>
+                            <i class="material-icons opacity-10">add_alarm</i>
                         </div>
                         <span class="nav-link-text ms-1">New Appointment</span>
                     </a>
@@ -108,7 +115,6 @@
     </aside>
 
     <main class="main-content border-radius-lg ">
-
         <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
         </asp:ContentPlaceHolder>
     </main>
@@ -132,16 +138,7 @@
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="./assets/js/material-dashboard.min.js?v=3.1.0"></script>
-
-    <%--<script>
-        var permission_link = document.getElementById("permission_link");
-        permission_link.addEventListener('click', function (event) {
-            event.preventDefault();
-            alert('permission_link clicked')
-        })
-    </script>--%>
 </body>
 </html>

@@ -106,10 +106,10 @@
                                 <div class="col-md-6">
                                     <strong>Hospital Type</strong>
                                     <select id="drpHospitalType" class="form-control outlinee">
-                                        <option value="Male">Unknown</option>
-                                        <option value="Female">Public</option>
-                                        <option value="Female">Private</option>
-                                        <option value="Other">Non-Profit</option>
+                                        <option value="Unknown">Unknown</option>
+                                        <option value="Public">Public</option>
+                                        <option value="Private">Private</option>
+                                        <option value="Non-Profit">Non-Profit</option>
                                     </select>
                                 </div>
                             </div>
@@ -185,23 +185,15 @@
                     $('#txtName').val(response.d.strName)
                     $('#txtHospitalPhoneNumber').val(response.d.strPhoneNumber)
                     $('#txtHospitalEmail').val(response.d.strEmail)
-                    var hospital_type = response.d.strType;
-                    if (hospital_type == '')
-
+                    //var hospital_type = response.d.strType;
+                    //alert(hospital_type)
+                    //if (hospital_type == 'Public') {
+                    //    $('#drpHospitalType').val(hospital_type)
+                    //}
                     $('#drpHospitalType').val(response.d.strType)
                     $('#drpState').val(response.d.strState)
                     $('#drpCity').val(response.d.strCity)
                     $('#txtHospitalAddress').val(response.d.strAddress)
-
-                    //user_type = response.d.strUserType;
-                    //if (user_type == 'User') {
-                    //    document.getElementById('vet_dashboard').style.display = 'none';
-                    //    document.getElementById('specialization_div').style.visibility = 'hidden';
-
-                    //} else {
-                    //    document.getElementById('user_dashboard').style.display = 'none';
-                    //    document.getElementById('specialization_div').style.visibility = 'visible';
-                    //}
 
                 },
                 error: function (error) {

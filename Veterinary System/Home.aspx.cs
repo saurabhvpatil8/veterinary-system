@@ -44,10 +44,19 @@ namespace Veterinary_System
         {
             objAnimal.iUserId = Constants.objUser.iUserId;
             Random rand = new Random();
-            objAnimal.iAnimalNumber = DateTime.Now.ToString("ssHHddMMyy" + rand.Next(10, 99));
-
+            objAnimal.strAnimalNumber = DateTime.Now.ToString("ssHHddMMyy" + rand.Next(10, 99));
+             
             ADO.AnimalADO AnimalADO = new ADO.AnimalADO();
             return AnimalADO.AddNewPet(objAnimal);
+        }
+
+        [WebMethod]
+        public static List<Animal> GetAnimals()
+        {
+            ADO.AnimalADO objAnimalADO = new ADO.AnimalADO();
+            List<Animal> lstAnimals = objAnimalADO.GetAnimalsByUserId(Constants.objUser.iUserId);
+
+            return lstAnimals;
         }
     }
 }

@@ -4,13 +4,26 @@
     <%-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>--%>
     <style>
+        .pet-image {
+            width: 100%;
+            height: 200px;
+            /*background-color: #e9ecef;*/
+            display: flex;
+            /*            justify-content: center;
+            align-items: center;*/
+            margin-bottom: 10px;
+        }
+
+        #navbarBlur {
+            margin-bottom: -20px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
         <div class="container-fluid py-1 px-3">
             <nav aria-label="breadcrumb">
-                <h6 class="font-weight-bolder mb-0">Doctor Dashboard</h6>
+                <h6 class="font-weight-bolder mb-0">User Dashboard</h6>
             </nav>
             <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                 <div class="ms-md-auto pe-md-3 d-flex align-items-center"></div>
@@ -19,7 +32,6 @@
                         <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#ModalAddPet">
                             Add Pet
                         </button>
-                        <%--<a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank" href="#">Add New Compounder</a>--%>
                     </li>
                 </ul>
             </div>
@@ -27,127 +39,60 @@
     </nav>
     <!-- End Navbar -->
 
-    <%--  <div id="toastPetAdd" class="d-flex align-items-center justify-content-between bg-gradient-primary border-0 pe-2 mx-auto" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body text-white">
-            Hello, world! This is a notification message.
-        </div>
-        <i class="fas fa-times text-md cursor-pointer pe-2 text-white" data-bs-dismiss="toast" aria-label="Close"></i>
-    </div>--%>
-
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-4 m-2">
         <div class="row">
             <div class="col-12">
-                <div class="card my-4">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Staff Members</h6>
-                        </div>
-                    </div>
-                    <div class="card-body px-0 pb-2">
-                        <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Author</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Function</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Employed</th>
-                                        <th class="text-secondary opacity-7"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div>
-                                                    <img src="../assets/img/team-2.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                                                </div>
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">John Michael</h6>
-                                                    <p class="text-xs text-secondary mb-0">john@creative-tim.com</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">Manager</p>
-                                            <p class="text-xs text-secondary mb-0">Organization</p>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <span class="badge badge-sm bg-gradient-primary">Online</span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">23/04/18</span>
-                                        </td>
-                                        <td class="align-middle">
-                                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">Edit
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div>
-                                                    <img src="../assets/img/team-3.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="user2">
-                                                </div>
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">Alexa Liras</h6>
-                                                    <p class="text-xs text-secondary mb-0">alexa@creative-tim.com</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">Programator</p>
-                                            <p class="text-xs text-secondary mb-0">Developer</p>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <span class="badge badge-sm bg-gradient-secondary">Offline</span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">11/01/19</span>
-                                        </td>
-                                        <td class="align-middle">
-                                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">Edit
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div>
-                                                    <img src="../assets/img/team-4.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="user3">
-                                                </div>
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">Laurent Perrier</h6>
-                                                    <p class="text-xs text-secondary mb-0">laurent@creative-tim.com</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">Executive</p>
-                                            <p class="text-xs text-secondary mb-0">Projects</p>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <span class="badge badge-sm bg-gradient-primary">Online</span>
-                                        </td>
-                                        <td class="align-middle text-center">
-                                            <span class="text-secondary text-xs font-weight-bold">19/09/17</span>
-                                        </td>
-                                        <td class="align-middle">
-                                            <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">Edit
-                                            </a>
-                                        </td>
-                                    </tr>
+                <h4>Pet Details</h4>
+            </div>
+        </div>
 
-                                </tbody>
-                            </table>
-                        </div>
+        <div class="row" id="divAnimalsContainer">
+            <div class="col-md-4">
+                <div class="pet-image">
+                    <img src="assets/img/animals/dogs1.jpg" width="350px" height="200px" />
+                </div>
+                <button class="btn btn-outline-secondary btn-custom">Edit</button>
+                <button class="btn btn-outline-secondary btn-custom">See Past Records</button>
+            </div>
+            <div class="col-md-8">
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <strong>Name:</strong> <span id="pet_name">pet_name</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Weight:</strong> <span id="pet_weight">0 KG</span>
                     </div>
                 </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <strong>Pet Number:</strong> <span id="pet_number">number</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Age:</strong> <span id="pet_age">0 years</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <strong>Gender:</strong> <span id="pet_gender">gender</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Description:</strong> <span id="pet_description">description</span>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <strong>Specie:</strong> <span id="pet_specie">specie</span>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Breed:</strong> <span id="pet_breed">breed</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-custom">Book Appointment</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Pet Add -->
     <div class="modal fade" id="ModalAddPet" tabindex="-1" aria-labelledby="ModalAddPet" aria-hidden="true">
         <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
             <div class="modal-content">
@@ -159,22 +104,17 @@
                             </div>
                         </div>
                         <div class="card-body pb-3">
-                            <%--<form runat="server" id="myForm">--%>
                             <div class="input-group input-group-outline row m-1">
                                 <strong>Name:</strong>
                                 <input type="text" id="txtName" class="form-control">
-                                <%--<asp:TextBox ID="txtName" runat="server" class="form-control"></asp:TextBox>--%>
                             </div>
                             <div class="input-group input-group-outline row m-1">
                                 <strong>Select specie:</strong>
-                                <%--<label class="form-label">Email</label>--%>
                                 <select id="drpSpecies" class="form-control"></select>
-                                <%--<asp:DropDownList ID="drpSpecies" class="form-control" runat="server"></asp:DropDownList>--%>
                             </div>
                             <div class="input-group input-group-outline row m-1">
                                 <strong>Select breed:</strong>
                                 <select id="drpBreeds" class="form-control"></select>
-                                <%--<asp:DropDownList ID="drpBreeds" class="form-control" runat="server"></asp:DropDownList>--%>
                             </div>
                             <div class="input-group input-group-outline row m-1">
                                 <strong>Select gender:</strong>
@@ -183,32 +123,22 @@
                                     <option value="Female">Female</option>
                                     <option value="Other">Other</option>
                                 </select>
-                                <%--                                    <asp:DropDownList ID="drpAnimalGender" class="form-control" runat="server">
-                                        <asp:ListItem Selected="True" Text="Male" Value="Male"></asp:ListItem>
-                                        <asp:ListItem Text="Female" Value="Female"></asp:ListItem>
-                                        <asp:ListItem Text="Other" Value="Other"></asp:ListItem>
-                                    </asp:DropDownList>--%>
                             </div>
                             <div class="input-group input-group-outline row m-1">
                                 <strong>Weight: (in KG)</strong>
                                 <input type="number" id="txtWeight" class="form-control">
-                                <%--<asp:TextBox ID="txtWeight" runat="server" TextMode="Number" class="form-control"></asp:TextBox>--%>
                             </div>
                             <div class="input-group input-group-outline row m-1">
                                 <strong>Birth date</strong>
                                 <input type="date" id="birthDate" class="form-control">
-                                <%--<asp:TextBox runat="server" class="form-control" TextMode="Date"></asp:TextBox>--%>
                             </div>
                             <div class="input-group input-group-outline row m-1">
                                 <strong>Description:</strong>
                                 <textarea id="txtDescription" class="form-control"></textarea>
-                                <%--<asp:TextBox ID="txtDescription" runat="server" TextMode="MultiLine" class="form-control"></asp:TextBox>--%>
                             </div>
                             <div class="text-center">
                                 <button class="btn bg-gradient-primary w-100 mt-4 mb-0" onclick="btnPetAdd()">Add Pet</button>
-                                <%--<asp:Button ID="btnAddPet" runat="server" Text="Add Pet" OnClick="btnAddPet_Click" class="btn bg-gradient-primary w-100 mt-4 mb-0" />--%>
                             </div>
-                            <%--</form>--%>
                         </div>
                     </div>
                 </div>
@@ -278,6 +208,90 @@
         //document.getElementById('myForm').addEventListener('submit', function (event) {
         //    if (!submit) { event.preventDefault(); }
         //});
+        GetAnimals();
+        function GetAnimals() {
+
+            $.ajax({
+                type: "POST",
+                url: "Home.aspx/GetAnimals",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response.d)
+                    var animals = response.d;
+                    var container = $('#divAnimalsContainer');
+                    container.empty();
+
+                    animals.forEach(function (animal) {
+                        var animalHtml = `
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="pet-image">
+                                    <img src="assets/img/animals/dogs1.jpg" width="350px" height="200px" />
+                                </div>
+                                <button class="btn btn-outline-secondary btn-custom" onclick="editAnimal(${animal.iAnimalId})">Edit</button>
+                                <button class="btn btn-outline-secondary btn-custom">See Past Records</button>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <strong>Name:</strong> <span>${animal.strName}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Weight:</strong> <span>${animal.strWeight} KG</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <strong>Pet Number:</strong> <span>${animal.strAnimalNumber}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Age:</strong> <span>${calculateAge(animal.dtBirthDate)} years</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <strong>Gender:</strong> <span>${animal.strGender}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Description:</strong> <span>${animal.strDescription}</span>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-md-6">
+                                        <strong>Specie:</strong> <span>${animal.strSpecie}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong>Breed:</strong> <span>${animal.strBreed}</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-custom">Book Appointment</button>
+                                <input type="hidden" id="animalId_${animal.iAnimalId}" value="${animal.iAnimalId}" />
+                            </div>
+                        </div>`;
+                        
+                        container.append(animalHtml);
+                    });
+                    
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function calculateAge(birthDate) {
+            var timestamp = parseInt(birthDate.replace(/\/Date\((\d+)\)\//, '$1'), 10);
+            var birth = new Date(timestamp);
+            var ageDiffMs = Date.now() - birth.getTime();
+            var ageDate = new Date(ageDiffMs);
+
+            return Math.abs(ageDate.getUTCFullYear() - 1970);
+        }
+
+        function editAnimal(animalId) {
+            console.log('Animal ID: ' + animalId)
+        }
 
         function btnPetAdd() {
             if ($('#txtName').val() == null || $('#txtName').val() == '') {
