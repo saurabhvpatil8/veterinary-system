@@ -40,6 +40,20 @@ namespace Veterinary_System
         }
 
         [WebMethod]
+        public static List<string> GetAllStates()
+        {
+            List<string> lstStates = Constants.objCountryData.states.Select(x => x.name).ToList();
+            return lstStates;
+        }
+
+        [WebMethod]
+        public static List<string> GetCityByState(string stateName)
+        {
+            List<string> lstCities = Constants.objCountryData.states.Where(x => x.name == stateName).Select(x => x.cities).FirstOrDefault();
+            return lstCities;
+        }
+
+        [WebMethod]
         public static bool AddNewPet(Animal objAnimal)
         {
             objAnimal.iUserId = Constants.objUser.iUserId;
@@ -58,5 +72,6 @@ namespace Veterinary_System
 
             return lstAnimals;
         }
+
     }
 }

@@ -34,5 +34,25 @@ namespace Veterinary_System
             return Constants.objHospital;
         }
 
+        [WebMethod]
+        public static List<string> GetAllStates()
+        {
+            List<string> lstStates = Constants.objCountryData.states.Select(x => x.name).ToList();
+            return lstStates;
+        }
+
+        [WebMethod]
+        public static List<string> GetCityByState(string stateName)
+        {
+            List<string> lstCities = Constants.objCountryData.states.Where(x => x.name == stateName).Select(x => x.cities).FirstOrDefault();
+            return lstCities;
+        }
+
+        [WebMethod]
+        public static bool UpdateUserData(User objUser)
+        {
+            ADO.UserADO objAnimalADO = new ADO.UserADO();
+            return objAnimalADO.UpdateUserData(objUser, Constants.objUser.iUserId);
+        }
     }
 }

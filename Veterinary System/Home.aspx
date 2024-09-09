@@ -137,6 +137,70 @@
                                 <textarea id="txtDescription" class="form-control"></textarea>
                             </div>
                             <div class="text-center">
+
+                                <button class="btn bg-gradient-primary w-100 mt-4 mb-0" onclick="btnPetAdd()">Add Pet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Book Appointment -->
+    <div class="modal fade" id="ModalBookAppointment" tabindex="-1" aria-labelledby="ModalBookAppointment" aria-hidden="true">
+        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-0">
+                    <div class="card card-plain">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1 text-center py-4">
+                                <h4 class="font-weight-bolder text-white mt-1">Select Doctor</h4>
+                            </div>
+                        </div>
+                        <div class="card-body pb-3">
+                            <div class="input-group input-group-outline row m-1">
+                                <div class="col-md-8">
+                                    <div class="row mb-2">
+                                        <div class="col-md-6">
+                                            <strong>Select State:</strong>
+                                            <select id="drpState" class="form-control"></select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>Select City:</strong>
+                                            <select id="drpCity" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <%--<div class="input-group input-group-outline row m-1">
+                                <strong>Select City:</strong>
+                                <select id="drpCity" class="form-control"></select>
+                            </div>
+                            <div class="input-group input-group-outline row m-1">
+                                <strong>Select gender:</strong>
+                                <select id="drpAnimalGender1" class="form-control">
+                                    <option value="Male" selected="selected">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-outline row m-1">
+                                <strong>Weight: (in KG)</strong>
+                                <input type="number" id="txtWeight1" class="form-control">
+                            </div>--%>
+                            <div class="input-group input-group-outline row m-1">
+                                <strong>Birth date</strong>
+                                <input type="date" id="birthDate1" class="form-control">
+                            </div>
+                            <div class="input-group input-group-outline row m-1">
+                                <strong>Description:</strong>
+                                <textarea id="txtDescription1" class="form-control"></textarea>
+                            </div>
+                            <div class="text-center">
                                 <button class="btn bg-gradient-primary w-100 mt-4 mb-0" onclick="btnPetAdd()">Add Pet</button>
                             </div>
                         </div>
@@ -153,8 +217,9 @@
         document.getElementById('vet_dashboard').style.display = 'none';
 
         var submit = false;
+        var petId = 0;
         fillUpSpecieDropDown();
-
+        fillUpStateDropDown();
         //$(document).ready(function () {
         //});
 
@@ -179,6 +244,7 @@
                 }
             });
         }
+
         function fillUpBreedsDropDown(speciesName) {
             $.ajax({
                 type: "POST",
@@ -200,14 +266,64 @@
             });
         }
 
+        /////////////////////////////////
+        function fillUpStateDropDown() {
+            $.ajax({
+                type: "POST",
+                url: "Home.aspx/GetAllStates",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var drpState = $('#drpState');
+                    drpState.empty();
+                    $.each(response.d, function (index, value) {
+                        drpState.append($('<option></option>').val(value).text(value));
+                    });
+
+                    var stateVal = document.getElementById('drpState');
+                    fillUpCitiesDropDown(stateVal.value);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+        function fillUpCitiesDropDown(stateName) {
+            $.ajax({
+                type: "POST",
+                url: "Home.aspx/GetCityByState",
+                data: JSON.stringify({ stateName: stateName }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var drpCity = $('#drpCity');
+                    drpCity.empty();
+
+                    $.each(response.d, function (index, value) {
+                        drpCity.append($('<option></option>').val(value).text(value));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
         $('#drpSpecies').change(function () {
             var selectedSpecies = $(this).val();
             fillUpBreedsDropDown(selectedSpecies);
         });
 
+        $('#drpState').change(function () {
+            var selectedState = $(this).val();
+            fillUpCitiesDropDown(selectedState);
+        });
+
         //document.getElementById('myForm').addEventListener('submit', function (event) {
         //    if (!submit) { event.preventDefault(); }
         //});
+
         GetAnimals();
         function GetAnimals() {
 
@@ -265,14 +381,15 @@
                                         <strong>Breed:</strong> <span>${animal.strBreed}</span>
                                     </div>
                                 </div>
+                                 <button class="btn btn-outline-secondary btn-custom" onclick="bookAppointment(${animal.iAnimalId})">Book Appointment</button>
                                 <button class="btn btn-primary btn-custom">Book Appointment</button>
                                 <input type="hidden" id="animalId_${animal.iAnimalId}" value="${animal.iAnimalId}" />
                             </div>
                         </div>`;
-                        
+
                         container.append(animalHtml);
                     });
-                    
+
                 },
                 error: function (error) {
                     console.log(error);
@@ -291,6 +408,12 @@
 
         function editAnimal(animalId) {
             console.log('Animal ID: ' + animalId)
+            console.log('Pet ID: ' + petId)
+        }
+
+        function bookAppointment(animalId) {
+            petId = animalId;
+            $('#ModalBookAppointment').modal('show');
         }
 
         function btnPetAdd() {

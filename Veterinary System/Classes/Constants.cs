@@ -39,14 +39,35 @@ namespace Veterinary_System.Classes
             { HttpContext.Current.Session["Hospital"] = value; }
         }
 
+        public static CountryData objCountryData
+        {
+            get
+            { return (CountryData)HttpContext.Current.Session["CountryData"]; }
+            set
+            { HttpContext.Current.Session["CountryData"] = value; }
+        }
 
         public static void OnLoad()
         {
-            string jsonFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "AnimalData.json");
-            string strJSON = File.ReadAllText(jsonFilePath);
+            string jsonFilePathAnimalData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "AnimalData.json");
+            string strJSONAnimalData = File.ReadAllText(jsonFilePathAnimalData);
+            objAnimalData = JsonConvert.DeserializeObject<AnimalData>(strJSONAnimalData);
 
-            objAnimalData = JsonConvert.DeserializeObject<AnimalData>(strJSON);
+            string jsonFilePathStateCity = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "statecity.json");
+            string strJSONStateCity = File.ReadAllText(jsonFilePathStateCity);
+            objCountryData = JsonConvert.DeserializeObject<CountryData>(strJSONStateCity);
+
         }
 
+    }
+
+    public class CountryData
+    {
+        public List<State> states { get; set; }
+    }
+    public class State
+    {
+        public string name { get; set; }
+        public List<string> cities { get; set; }
     }
 }

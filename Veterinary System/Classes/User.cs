@@ -15,6 +15,8 @@ namespace Veterinary_System.Classes
         public string strFName { get; set; }
         public string strLName { get; set; }
         public string strPhoneNo { get; set; }
+        public string strState { get; set; }
+        public string strCity { get; set; }
         public string strSpecialization { get; set; }
         public string strAddress { get; set; }
     }

@@ -49,6 +49,16 @@
                             </div>
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
+                                    <strong>State</strong>
+                                    <select id="drpStateUser" class="form-control outlinee"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>City</strong>
+                                    <select id="drpCityUser" class="form-control outlinee"></select>
+                                </div>
+                            </div>
+                            <div class="row gx-3 mb-3">
+                                <div class="col-md-6">
                                     <strong>User Type</strong>
                                     <input class="form-control outlinee" id="txtUserType" disabled type="text" placeholder="Your User Type">
                                 </div>
@@ -80,7 +90,7 @@
         <br />
         <hr />
         <br />
-        <div class="card card-body mx-3 mx-md-4 mt-n6 m-2">
+        <div class="card card-body mx-3 mx-md-4 mt-n6 m-2" id="hospital_details">
             <div class="container-xl px-4 mt-4">
                 <div class="row">
                     <div class="">
@@ -116,11 +126,11 @@
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <strong>State</strong>
-                                    <select id="drpState" class="form-control outlinee"></select>
+                                    <select id="drpStateHospital" class="form-control outlinee"></select>
                                 </div>
                                 <div class="col-md-6">
                                     <strong>City</strong>
-                                    <select id="drpCity" class="form-control outlinee"></select>
+                                    <select id="drpCityHospital" class="form-control outlinee"></select>
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -143,8 +153,9 @@
     <script>
         document.getElementById("profile_link").classList.add('bg-gradient-primary');
         var user_type = '';
-        onPageLoad();
+        fillUpStateDropDown();
 
+        onPageLoad();
         function onPageLoad() {
             $.ajax({
                 type: "POST",
@@ -167,7 +178,12 @@
 
                     } else {
                         document.getElementById('user_dashboard').style.display = 'none';
-                        document.getElementById('specialization_div').style.visibility = 'visible';
+
+                        if (user_type == 'Compunder') {
+                            document.getElementById('specialization_div').style.visibility = 'hidden';
+                        } else {
+                            document.getElementById('specialization_div').style.visibility = 'visible';
+                        }
                     }
 
                 },
@@ -203,13 +219,122 @@
 
         }
 
+        function fillUpStateDropDown() {
+            $.ajax({
+                type: "POST",
+                url: "Profile.aspx/GetAllStates",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //User States-Cities Value fill up
+                    var drpState = $('#drpStateUser');
+                    drpState.empty();
+                    $.each(response.d, function (index, value) {
+                        drpState.append($('<option></option>').val(value).text(value));
+                    });
+
+                    var stateVal = document.getElementById('drpStateUser');
+                    var drpCity = $('#drpCityUser');
+                    fillUpCitiesDropDown(stateVal.value, drpCity);
+
+                    //Hospital States - Cities Value fill up
+                    drpState = $('#drpStateHospital');
+                    drpState.empty();
+                    $.each(response.d, function (index, value) {
+                        drpState.append($('<option></option>').val(value).text(value));
+                    });
+
+                    stateVal = document.getElementById('drpStateHospital');
+                    drpCity = $('#drpCityHospital');
+                    fillUpCitiesDropDown(stateVal.value, drpCity);
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function fillUpCitiesDropDown(stateName, drpCity) {
+            $.ajax({
+                type: "POST",
+                url: "Profile.aspx/GetCityByState",
+                data: JSON.stringify({ stateName: stateName }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    drpCity.empty();
+
+                    $.each(response.d, function (index, value) {
+                        drpCity.append($('<option></option>').val(value).text(value));
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $('#drpStateUser').change(function () {
+            var selectedState = $(this).val();
+            var drpCity = $('#drpCityUser');
+            fillUpCitiesDropDown(selectedState, drpCity);
+        });
+
+        $('#drpStateHospital').change(function () {
+            var selectedState = $(this).val();
+            var drpCity = $('#drpCityHospital');
+            fillUpCitiesDropDown(selectedState, drpCity);
+        });
+
+
         $(window).on("load", function () {
+
             console.log("user_type: " + user_type);
+            if (user_type != 'Doctor') {
+                document.getElementById('hospital_details').style.display = 'none';
+            } else {
+                document.getElementById('hospital_details').style.display = 'block';
+            }
+
         });
         /*$(document).ready(function () {          });*/
 
         function btnUpdateProfile() {
+            //if ($('#txtName').val() == null || $('#txtName').val() == '') {
+            //    alert('Enter your Pet name..!')
+            //    return;
+            //}
 
+            var objUser = {
+                strFName: $('#txtFirstName').val(),
+                strLName: $('#txtLastName').val(),
+                strEmail: $('#txtEmail').val(),
+                strPhoneNo: $('#txtPhoneNumber').val(),
+                strState: $('#drpStateUser').val(),
+                strCity: $('#drpCityUser').val(),
+                strSpecialization: $('#txtSpecialization').val(),
+                strAddress: $('#txtAddress').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "Profile.aspx/UpdateUserData",
+                data: JSON.stringify({ objUser: objUser }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.d == true) {
+                        alert('User information updated successfully.')
+                    } else {
+                        alert('There is some problem in updating your information, please try after some time..!')
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
         }
 
         function btnUpdateHospital() {

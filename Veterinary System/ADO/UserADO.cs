@@ -199,5 +199,43 @@ namespace Veterinary_System.ADO
 
         }
 
+
+        public bool UpdateUserData(User objUser, int iUserId)
+        {
+            try
+            {
+                int iResult = -1;
+                using (objDBConfig.Database)
+                {
+                    if (objDBConfig.Database.State == ConnectionState.Closed)
+                        objDBConfig.Database.Open();
+
+                    string strQuery = "UPDATE users SET email = @email, fname = @fname, lname = @lname, phone_no = @phone_no, specialization = @specialization, state = @state, city = @city, address = @address WHERE user_id = @user_id;";
+                    MySqlCommand sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
+
+                    sqlCommand.Parameters.AddWithValue("@user_id", iUserId);
+                    sqlCommand.Parameters.AddWithValue("@email", objUser.strEmail == "" ? null : objUser.strEmail);
+                    sqlCommand.Parameters.AddWithValue("@fname", objUser.strFName == "" ? null : objUser.strFName);
+                    sqlCommand.Parameters.AddWithValue("@lname", objUser.strLName == "" ? null : objUser.strLName);
+                    sqlCommand.Parameters.AddWithValue("@phone_no", objUser.strPhoneNo == "" ? null : objUser.strPhoneNo);
+                    sqlCommand.Parameters.AddWithValue("@specialization", objUser.strSpecialization == "" ? null : objUser.strSpecialization);
+                    sqlCommand.Parameters.AddWithValue("@state", objUser.strState == "" ? null : objUser.strState);
+                    sqlCommand.Parameters.AddWithValue("@city", objUser.strCity == "" ? null : objUser.strCity);
+                    sqlCommand.Parameters.AddWithValue("@address", objUser.strAddress == "" ? null : objUser.strAddress);
+
+                    iResult = Convert.ToInt32(sqlCommand.ExecuteNonQuery());
+
+                    if (objDBConfig.Database.State == ConnectionState.Open)
+                        objDBConfig.Database.Close();
+                }
+                return iResult > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {   //error
+                return false;
+            }
+        }
+
+
     }
 }
