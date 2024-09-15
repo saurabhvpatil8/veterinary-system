@@ -1,11 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.UI;
+using Veterinary_System.ADO;
 using Veterinary_System.Classes;
 
 namespace Veterinary_System
@@ -71,6 +74,14 @@ namespace Veterinary_System
             List<Animal> lstAnimals = objAnimalADO.GetAnimalsByUserId(Constants.objUser.iUserId);
 
             return lstAnimals;
+        }
+
+        [WebMethod]
+        public static List<HospitalsWithDoctors> GetHospitalWithDoctors(string strState, string strCity)
+        {
+            List<HospitalsWithDoctors> lstHospitalsWithDoctors = Constants.lstHospitalsWithDoctors;
+
+            return lstHospitalsWithDoctors.Where(x => x.objHospital.strState == strState && x.objHospital.strCity == strCity).ToList();
         }
 
     }

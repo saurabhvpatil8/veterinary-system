@@ -339,6 +339,36 @@
 
         function btnUpdateHospital() {
 
+            var objHospital = {
+
+                strName: $('#txtName').val(),
+                strPhoneNumber: $('#txtHospitalPhoneNumber').val(),
+                strEmail: $('#txtHospitalEmail').val(),
+                strType: $('#drpHospitalType').val(),
+                strState: $('#drpStateHospital').val(),
+                strCity: $('#drpCityHospital').val(),
+                strAddress: $('#txtHospitalAddress').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "Profile.aspx/UpdateHospitalData",
+                data: JSON.stringify({ objHospital: objHospital }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+                    if (response.d == true) {
+                        alert('Hospital information updated successfully.')
+                    } else {
+                        alert('There is some problem in updating your information, please try after some time..!')
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
         }
 //        document.getElementById('vet_dashboard').style.display = 'none';
 

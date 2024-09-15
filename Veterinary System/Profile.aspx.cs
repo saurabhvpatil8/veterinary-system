@@ -54,5 +54,12 @@ namespace Veterinary_System
             ADO.UserADO objAnimalADO = new ADO.UserADO();
             return objAnimalADO.UpdateUserData(objUser, Constants.objUser.iUserId);
         }
+
+        [WebMethod]
+        public static bool UpdateHospitalData(Hospital objHospital)
+        {
+            ADO.UserADO objAnimalADO = new ADO.UserADO();
+            return objAnimalADO.UpdateHospitalData(objHospital, Constants.objHospital.iHospitalId);
+        }
     }
 }

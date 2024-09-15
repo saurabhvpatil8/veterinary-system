@@ -15,5 +15,11 @@ namespace Veterinary_System.Classes
         public string strState { get; set; }
         public string strCity { get; set; }
         public string strAddress { get; set; }
+        public int iIsAuthenticate { get; set; }
+    }
+    public class HospitalsWithDoctors
+    {
+        public Hospital objHospital { get; set; }
+        public List<User> lstDoctors { get; set; }
     }
 }

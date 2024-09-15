@@ -236,6 +236,104 @@ namespace Veterinary_System.ADO
             }
         }
 
+        public bool UpdateHospitalData(Hospital objHospital, int iHospitalId)
+        {
+            try
+            {
+                int iResult = -1;
+                using (objDBConfig.Database)
+                {
+                    if (objDBConfig.Database.State == ConnectionState.Closed)
+                        objDBConfig.Database.Open();
+
+                    string strQuery = "UPDATE hospitals SET name = @name, phone = @phone, email = @email, type = @type, state = @state, city = @city, address = @address WHERE hospital_id = @hospital_id;";
+                    MySqlCommand sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
+
+                    sqlCommand.Parameters.AddWithValue("@hospital_id", iHospitalId);
+                    sqlCommand.Parameters.AddWithValue("@name", objHospital.strName == "" ? null : objHospital.strName);
+                    sqlCommand.Parameters.AddWithValue("@phone", objHospital.strPhoneNumber == "" ? null : objHospital.strPhoneNumber);
+                    sqlCommand.Parameters.AddWithValue("@email", objHospital.strEmail== "" ? null : objHospital.strEmail);
+                    sqlCommand.Parameters.AddWithValue("@type", objHospital.strType== "" ? null : objHospital.strType);
+                    sqlCommand.Parameters.AddWithValue("@state", objHospital.strState == "" ? null : objHospital.strState);
+                    sqlCommand.Parameters.AddWithValue("@city", objHospital.strCity == "" ? null : objHospital.strCity);
+                    sqlCommand.Parameters.AddWithValue("@address", objHospital.strAddress == "" ? null : objHospital.strAddress);
+
+                    iResult = Convert.ToInt32(sqlCommand.ExecuteNonQuery());
+
+                    if (objDBConfig.Database.State == ConnectionState.Open)
+                        objDBConfig.Database.Close();
+                }
+                return iResult > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {   //error
+                return false;
+            }
+        }
+
+        //public List<Hospital> GetHospitalWithDoctors()
+        //{
+        //    List<Hospital> lstHospitalsWithDoctors = new List<Hospital>();
+        //    DBConfig objDBConfig = new DBConfig();
+        //    int iHospitalId = 0;
+
+        //    try
+        //    {
+        //        int iResult = -1;
+        //        using (objDBConfig.Database)
+        //        {
+
+        //            MySqlCommand command = new MySqlCommand("select * from hospitals;", objDBConfig.Database);
+        //            MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command);
+        //            dataAdapter.SelectCommand = command;
+
+        //            DataTable objDataTable = new DataTable();
+        //            dataAdapter.Fill(objDataTable);
+        //            foreach (DataRow data in objDataTable.Rows)
+        //            {
+        //                iHospitalId = (int)data["hospital_id"];
+
+        //                ////////////just added uptill here, start from here bitch
+
+
+        //                Hospital = new Hospital
+        //                {
+
+        //                    iUserId = (int)data["user_id"],
+        //                    strUserType = data["user_type"].ToString(),
+        //                    strEmail = data["email"].ToString(),
+        //                    strPassword = data["password"].ToString(),
+        //                    iHospitalId = data["hospital_id"] != DBNull.Value ? (int)(data["hospital_id"]) : (int?)null,
+        //                    strFName = data["fname"].ToString(),
+        //                    strLName = data["lname"].ToString(),
+        //                    strPhoneNo = data["phone_no"].ToString(),
+        //                    strSpecialization = data["specialization"].ToString(),
+        //                    strAddress = data["address"].ToString()
+        //                };
+        //            }
+        //        }
+
+
+
+        //            if (objDBConfig.Database.State == ConnectionState.Closed)
+        //                objDBConfig.Database.Open();
+
+        //            string strQuery = "SELECT * FROM hospitals;";
+        //            MySqlCommand sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
+        //            iResult = Convert.ToInt32(sqlCommand.ExecuteNonQuery());
+
+
+        //            if (objDBConfig.Database.State == ConnectionState.Open)
+        //                objDBConfig.Database.Close();
+        //        //}
+        //        return lstHospitalsWithDoctors.Count > 0 ? lstHospitalsWithDoctors : null;
+        //    }
+        //    catch (Exception ex)
+        //    {   //error
+        //        return null;
+        //    }
+
+        //}
 
     }
 }

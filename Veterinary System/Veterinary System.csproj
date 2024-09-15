@@ -237,6 +237,7 @@
   <ItemGroup>
     <Compile Include="ADO\AnimalADO.cs" />
     <Compile Include="ADO\DBConfig.cs" />
+    <Compile Include="ADO\HospitalsADO.cs" />
     <Compile Include="ADO\UserADO.cs" />
     <Compile Include="Billing.aspx.cs">
       <DependentUpon>Billing.aspx</DependentUpon>

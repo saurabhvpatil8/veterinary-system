@@ -137,7 +137,6 @@
                                 <textarea id="txtDescription" class="form-control"></textarea>
                             </div>
                             <div class="text-center">
-
                                 <button class="btn bg-gradient-primary w-100 mt-4 mb-0" onclick="btnPetAdd()">Add Pet</button>
                             </div>
                         </div>
@@ -164,15 +163,14 @@
                                     <div class="row mb-2">
                                         <div class="col-md-6">
                                             <strong>Select State:</strong>
-                                            <select id="drpState" class="form-control"></select>
+                                            <%--<select id="drpState" class="form-control"></select>--%>
                                         </div>
                                         <div class="col-md-6">
                                             <strong>Select City:</strong>
-                                            <select id="drpCity" class="form-control"></select>
+                                            <%--<select id="drpCity" class="form-control"></select>--%>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
-
                                     </div>
                                 </div>
                             </div>
@@ -210,6 +208,43 @@
         </div>
     </div>
 
+    <div class="modal fade" id="doctorAppointmentModal" tabindex="-1" aria-labelledby="doctorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="doctorModalLabel">Select Doctor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label for="drpState">Select State:</label>
+                            <select id="drpState" class="form-select p-2"></select>
+                            <%--<select id="state" class="form-select" onchange="getDoctors()">
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Gujarat">Gujarat</option>
+                            </select>--%>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="drpCity">Select City:</label>
+                            <select id="drpCity" class="form-select p-2"></select>
+                            <%--<select id="drpCity" class="form-select p-2" onchange="getDoctors();" ></select>--%>
+                            <%--<select id="city" class="form-select" onchange="getDoctors()">
+                                <option value="Nashik">Nashik</option>
+                                <option value="Mumbai">Mumbai</option>
+                            </select>--%>
+                        </div>
+                        <div class="col-md-2">
+                            <br />
+                            <input value="Search" title="Search" type="button" onclick="getDoctors();" class="btn btn-primary btn-custom" />
+                        </div>
+                    </div>
+                    <div id="hospitalContainer" class="container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <%--<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>--%>
     <%--<script src="/assets/js/plugins/flatpickr.min.js"></script>--%>
     <script>
@@ -220,6 +255,7 @@
         var petId = 0;
         fillUpSpecieDropDown();
         fillUpStateDropDown();
+
         //$(document).ready(function () {
         //});
 
@@ -244,7 +280,6 @@
                 }
             });
         }
-
         function fillUpBreedsDropDown(speciesName) {
             $.ajax({
                 type: "POST",
@@ -266,7 +301,6 @@
             });
         }
 
-        /////////////////////////////////
         function fillUpStateDropDown() {
             $.ajax({
                 type: "POST",
@@ -326,7 +360,6 @@
 
         GetAnimals();
         function GetAnimals() {
-
             $.ajax({
                 type: "POST",
                 url: "Home.aspx/GetAnimals",
@@ -381,8 +414,8 @@
                                         <strong>Breed:</strong> <span>${animal.strBreed}</span>
                                     </div>
                                 </div>
-                                 <button class="btn btn-outline-secondary btn-custom" onclick="bookAppointment(${animal.iAnimalId})">Book Appointment</button>
-                                <button class="btn btn-primary btn-custom">Book Appointment</button>
+
+                                 <button class="btn btn-primary btn-custom" onclick="callAppointmentModal(${animal.iAnimalId})">Book Appointment</button>
                                 <input type="hidden" id="animalId_${animal.iAnimalId}" value="${animal.iAnimalId}" />
                             </div>
                         </div>`;
@@ -411,9 +444,31 @@
             console.log('Pet ID: ' + petId)
         }
 
-        function bookAppointment(animalId) {
+        function callAppointmentModal(animalId) {
             petId = animalId;
-            $('#ModalBookAppointment').modal('show');
+            $('#doctorAppointmentModal').modal('show');
+        }
+
+        function bookAppointment(doctorId) {
+            alert('DoctorID : ' + doctorId + ', PetId : ' + petId);
+
+            $.ajax({
+                type: "POST",
+                url: "Home.aspx/GetHospitalWithDoctors",
+                data: JSON.stringify({ strState: state, strCity: city }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+
+
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+
         }
 
         function btnPetAdd() {
@@ -444,6 +499,79 @@
                         $('#ModalAddPet').modal('hide');
                     } else {
                         alert('There is some problem in adding your pet, please try after some time..!')
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        function getDoctors() {
+            var state = $('#drpState').val();
+            var city = $('#drpCity').val();
+
+            $.ajax({
+                type: "POST",
+                url: "Home.aspx/GetHospitalWithDoctors",
+                data: JSON.stringify({ strState: state, strCity: city }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var hospitals = response.d;
+                    $('#hospitalContainer').empty();
+
+                    if (hospitals.length > 0) {
+                        hospitals.forEach(function (hospital) {
+                            var doctorInfo = '';
+
+                            hospital.lstDoctors.forEach(function (doctor) {
+                                doctorInfo += `</br>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <p><strong>Doctor Name:</strong> ${doctor.strFName} ${doctor.strLName}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Specialization:</strong> ${doctor.strSpecialization}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Select Date: </strong><input id="date_${doctor.iUserId}" class="border p-2" type="date" />
+                                </div>
+                                <input type="hidden" id="doctor_${doctor.iUserId}" value="${doctor.iUserId}">
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-custom" onclick="bookAppointment(${doctor.iUserId});">Book Appointment</button>
+                                </div>
+                            </div>
+                            `;
+                            });
+
+                            var hospitalHtml = `
+                        <div class="border rounded p-2">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h5>Hospital: ${hospital.objHospital.strName}</h5>
+                                </div>
+                                <div class="col-md-8">
+                                    <p><strong>Phone no.:</strong> ${hospital.objHospital.strPhoneNumber} | <strong>Email ID:</strong> ${hospital.objHospital.strEmail}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p><strong>Type:</strong> ${hospital.objHospital.strType}</p>
+                                </div>
+                                <div class="col-md-10">
+                                    <p><strong>Address:</strong> ${hospital.objHospital.strAddress}</p>
+                                </div>
+                            </div>
+                            ${doctorInfo}
+                        </div>
+                        </br>`;
+                            $('#hospitalContainer').append(hospitalHtml);
+                        });
+                    } else {
+                        $('#hospitalContainer').append('<p>No Hospital Found..!</p>');
                     }
                 },
                 error: function (error) {

@@ -118,11 +118,13 @@
                     } else {
                         alert('Database error, Please try after some time..!')
                     }
+                    $('#ModalAddDoctor').modal('hide');
                 },
                 failure: function (response) {
                     alert(response.d);
                 }
             });
+
         }
 
         //$('#permission_link').css('display', 'none');

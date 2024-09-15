@@ -20,4 +20,5 @@ namespace Veterinary_System.Classes
         public string strSpecialization { get; set; }
         public string strAddress { get; set; }
     }
+
 }

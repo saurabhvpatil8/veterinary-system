@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using Veterinary_System.ADO;
 
 namespace Veterinary_System.Classes
 {
@@ -30,7 +31,6 @@ namespace Veterinary_System.Classes
             set
             { HttpContext.Current.Session["AnimalData"] = value; }
         }
-
         public static Hospital objHospital
         {
             get
@@ -47,6 +47,14 @@ namespace Veterinary_System.Classes
             { HttpContext.Current.Session["CountryData"] = value; }
         }
 
+        public static List<HospitalsWithDoctors> lstHospitalsWithDoctors
+        {
+            get
+            { return (List<HospitalsWithDoctors>)HttpContext.Current.Session["HospitalsWithDoctors"]; }
+            set
+            { HttpContext.Current.Session["HospitalsWithDoctors"] = value; }
+        }
+
         public static void OnLoad()
         {
             string jsonFilePathAnimalData = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "AnimalData.json");
@@ -56,6 +64,8 @@ namespace Veterinary_System.Classes
             string jsonFilePathStateCity = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "statecity.json");
             string strJSONStateCity = File.ReadAllText(jsonFilePathStateCity);
             objCountryData = JsonConvert.DeserializeObject<CountryData>(strJSONStateCity);
+
+            lstHospitalsWithDoctors = HospitalsADO.GetHospitalsWithDoctors();
 
         }
 
