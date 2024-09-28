@@ -254,7 +254,9 @@
     <Compile Include="Classes\Appointment.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\Diagnoses.cs" />
+    <Compile Include="Classes\EmailSender.cs" />
     <Compile Include="Classes\Hospital.cs" />
+    <Compile Include="Classes\IEmailSender.cs" />
     <Compile Include="Classes\Permission.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Dashboard.Master.cs">

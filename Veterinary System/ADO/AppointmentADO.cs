@@ -99,31 +99,56 @@ namespace Veterinary_System.ADO
             }
         }
 
-        public bool ApproveAppointment(int iAppointmentId)
+        public string ApproveAppointment(int iAppointmentId, DateTime dtNewDate)
         {
             try
             {
                 int iResult = -1;
+                string strEmailId = null;
                 using (objDBConfig.Database)
                 {
                     if (objDBConfig.Database.State == ConnectionState.Closed)
                         objDBConfig.Database.Open();
 
-                    string strQuery = "Update appointments set status = @status where appointment_id = @id;";
+                    string strQuery = "Update appointments set status = @status, appointment_date = @newDate where appointment_id = @id;";
                     MySqlCommand command = new MySqlCommand(strQuery, objDBConfig.Database);
 
                     command.Parameters.AddWithValue("@status", Appointment.enumAppointmentStatus.Approved);
+                    command.Parameters.AddWithValue("@newDate", dtNewDate);
                     command.Parameters.AddWithValue("@id", iAppointmentId);
 
                     iResult = Convert.ToInt32(command.ExecuteNonQuery());
-                    if (objDBConfig.Database.State == ConnectionState.Open)
-                        objDBConfig.Database.Close();
+
+                    if (iResult > 0)
+                    {
+                        strQuery = "select users.email from appointments join animals on appointments.animal_id = animals.animal_id join users on animals.user_id = users.user_id where appointments.appointment_id = " + iAppointmentId + ";";
+
+                        command = new MySqlCommand(strQuery, objDBConfig.Database);
+                        MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command);
+                        dataAdapter.SelectCommand = command;
+
+                        DataTable objDataTable = new DataTable();
+                        dataAdapter.Fill(objDataTable);
+                        foreach (DataRow data in objDataTable.Rows)
+                        {
+                            strEmailId = data["email"].ToString();
+                        }
+                        return strEmailId;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
-                return iResult > 0 ? true : false;
             }
             catch (Exception ex)
             {
-                return false;   // error
+                return null;   // error
+            }
+            finally
+            {
+                if (objDBConfig.Database.State == ConnectionState.Open)
+                    objDBConfig.Database.Close();
             }
         }
 

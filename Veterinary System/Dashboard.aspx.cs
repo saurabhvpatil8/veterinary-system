@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Services;
 using System.Web.UI;
@@ -72,12 +74,71 @@ namespace Veterinary_System.Doctor
         }
 
         [WebMethod]
-        public static bool ApproveAppointment(int id)
+        public static bool ApproveAppointment(int id, DateTime newDate)
         {
             AppointmentADO objAppointmentADO = new AppointmentADO();
-            bool bResult = objAppointmentADO.ApproveAppointment(id);
+            string strToEmail = objAppointmentADO.ApproveAppointment(id, newDate);
 
-            return bResult;
+            if (!string.IsNullOrEmpty(strToEmail))
+            {
+                SendMail(toEmail: strToEmail, strSubject: "Approval of Appointment Request", strBody: "Your appointment request has been accepted. You can come on " + newDate.ToString("dd-MM-yyyy") + " for your pet's further diagnosis.");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static void SendMail(string toEmail, string strSubject, string strBody)
+        {
+            MailMessage objMailMessage = new MailMessage("saurabhvpatil5@gmail.com", toEmail);
+            objMailMessage.Subject = strSubject;
+            objMailMessage.Body = strBody;
+            //objMailMessage.Body = "Yaa, I'm nervious that day also, and today also..!";
+
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.Credentials = new System.Net.NetworkCredential()
+            {
+                UserName = "saurabhvpatil5@gmail.com",      // From
+                Password = "rnwi xgik bmnd lcpl"        // Google account app password
+            };
+
+            smtpClient.EnableSsl = true;
+            smtpClient.Send(objMailMessage);
+
+        }
+
+        private Task SendEmailAsync1(string email, string subject, string message)
+        {
+            try
+            {
+                // Configure the SmtpClient
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    EnableSsl = true,
+                    UseDefaultCredentials = false,
+                    Credentials = new System.Net.NetworkCredential("your_email@gmail.com", "your_password_or_app_password")
+                };
+
+                // Create the mail message
+                MailMessage mailMessage = new MailMessage
+                {
+                    From = new MailAddress("your_email@gmail.com"),
+                    Subject = subject,
+                    Body = message
+                };
+
+                mailMessage.To.Add(email);
+
+                // Send the email asynchronously
+                return client.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                // Handle error (e.g., log it or display an error message)
+                return Task.FromException(ex);
+            }
         }
 
         [WebMethod]

@@ -188,7 +188,7 @@
 
                 // Appointment Date (editable if status is "Pending")  Pending == 0
                 let dateColumn = appointment.enumStatus === 0
-                    ? `<input type="date" class="form-control" value="${dtFormattedAppointment}" onchange="changeAppointmentDate('${appointment.iAppointmentId}', this.value)">`
+                    ? `<input type="date" class="form-control" id="date_${appointment.appointment_id}" value="${dtFormattedAppointment}">`
                     : dtFormattedAppointment;
                 row.append(`<td class="text-center">${dateColumn}</td>`);
 
@@ -210,7 +210,7 @@
                 let actions;
                 if (appointment.enumStatus == 0) {
                     actions = `
-                        <button class="btn btn-outline-success" onclick="approveAppointment('${appointment.iAppointmentId}')">Approve</button>
+                        <button class="btn btn-outline-success" onclick="approveAppointment('${appointment.iAppointmentId}', document.getElementById('date_${appointment.appointment_id}').value)">Approve</button>
                         <button class="btn btn-outline-danger" onclick="rejectAppointment('${appointment.iAppointmentId}')">Reject</button>`;
                 } else if (appointment.enumStatus == 1) {
                     actions = `
@@ -242,18 +242,18 @@
             //});
         }
 
-        function approveAppointment(appointmentId) { 
+        function approveAppointment(appointmentId, appointmentDate) {
             $.ajax({
                 type: "POST",
                 url: "Dashboard.aspx/ApproveAppointment",
-                data: JSON.stringify({ id: appointmentId }),
+                data: JSON.stringify({ id: appointmentId, newDate: appointmentDate }),
                 contentType: "application/json;",
                 dataType: "json",
                 success: function (response) {
                     if (response.d) {
                         loadAppointments(); // Reload table after approval
                     } else {
-                        alert('There is some issue in completing your request..!')
+                        alert('There is some issue in completing your request.! Please try after some time..!')
                     }
                 },
                 failure: function (response) {
@@ -266,7 +266,7 @@
             $.ajax({
                 type: "POST",
                 url: "Dashboard.aspx/RejectAppointment",
-                data: JSON.stringify({ id: appointmentId }),
+                data: JSON.stringify({ id: appointmentId}),
                 contentType: "application/json;",
                 dataType: "json",
                 success: function (response) {
