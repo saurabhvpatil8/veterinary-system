@@ -44,7 +44,7 @@
     </div>
     <script>
         document.getElementById("billing_link").classList.add('bg-gradient-primary');
-        document.getElementById('user_dashboard').style.display = 'none';
+        //document.getElementById('user_dashboard').style.display = 'none';
 
     </script>
 </asp:Content>

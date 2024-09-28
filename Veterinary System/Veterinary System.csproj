@@ -126,7 +126,9 @@
     <Content Include="assets\css\nucleo-icons.css" />
     <Content Include="assets\css\nucleo-svg.css" />
     <Content Include="assets\fonts\nucleo-icons.svg" />
-    <Content Include="assets\img\animals\dogs1.jpg" />
+    <Content Include="assets\img\animals\cat.jpg" />
+    <Content Include="assets\img\animals\cow.jpeg" />
+    <Content Include="assets\img\animals\dog.jpg" />
     <Content Include="assets\img\apple-icon.png" />
     <Content Include="assets\img\bg-pricing.jpg" />
     <Content Include="assets\img\bg-smart-home-1.jpg" />
@@ -236,8 +238,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ADO\AnimalADO.cs" />
+    <Compile Include="ADO\AppointmentADO.cs" />
     <Compile Include="ADO\DBConfig.cs" />
     <Compile Include="ADO\HospitalsADO.cs" />
+    <Compile Include="ADO\PermissionsADO.cs" />
     <Compile Include="ADO\UserADO.cs" />
     <Compile Include="Billing.aspx.cs">
       <DependentUpon>Billing.aspx</DependentUpon>
@@ -247,6 +251,7 @@
       <DependentUpon>Billing.aspx</DependentUpon>
     </Compile>
     <Compile Include="Classes\Animal.cs" />
+    <Compile Include="Classes\Appointment.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\Diagnoses.cs" />
     <Compile Include="Classes\Hospital.cs" />
@@ -522,7 +527,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50489</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50490/</IISUrl>
+          <IISUrl>http://localhost:50489/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -1,6 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="Veterinary_System.Doctor.Dashboard" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -29,6 +32,25 @@
     </nav>
     <!-- End Navbar -->
     <div class="container-fluid py-4">
+        <div class="row">
+            <h2>Appointments</h2>
+            <table id="appointmentTable" class="table table-striped text-center mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center">Doctor Name</th>
+                        <th scope="col" class="text-center">Animal Specie</th>
+                        <th scope="col" class="text-center">Animal Breed</th>
+                        <th scope="col" class="text-center">Pet Parent</th>
+                        <th scope="col" class="text-center">Appointment Date</th>
+                        <th scope="col" class="text-center">Status</th>
+                        <th scope="col" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="appointmentTableBody">
+                </tbody>
+            </table>
+
+        </div>
     </div>
 
     <!-- Modal Add Doctor -->
@@ -84,7 +106,7 @@
                                     <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" class="form-control"></asp:TextBox>
                                 </div>
                                 <div class="text-center">
-                                    <asp:Button ID="btnAddNewCompounder" runat="server" Text="Add New Compunder" OnClick="btnAddNewCompounder_Click" class="btn bg-gradient-primary" />
+                                    <asp:Button ID="btnAddNewCompounder" runat="server" Text="Add New Compounder" OnClick="btnAddNewCompounder_Click" class="btn bg-gradient-primary" />
                                 </div>
                             </form>
                         </div>
@@ -95,11 +117,14 @@
     </div>
 
     <script>
+        const itemsPerPage = 3; // Change this value to display more/less rows per page
+        let currentPage = 1;
+        let appointments = [];
+        
         const dashboard_link = document.getElementById("dashboard_link");
         dashboard_link.classList.add("bg-gradient-primary");
 
-        document.getElementById('user_dashboard').style.display = 'none';
-        /*user_dashboard.style.display = "none";*/
+        //document.getElementById('user_dashboard').style.display = 'none';
 
 
         function btnAddDoctor() {
@@ -125,6 +150,158 @@
                 }
             });
 
+        }
+
+        function loadAppointments() {
+            $.ajax({
+                type: "POST",
+                url: "Dashboard.aspx/GetAppointments",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    appointments = response.d;
+                    console.log(appointments);
+
+                    renderTable();
+                },
+                error: function (err) {
+                    console.error("Error fetching appointments: ", err);
+                }
+            });
+        }
+
+
+        function renderTable() {
+            let tableBody = $('#appointmentTableBody');
+            tableBody.empty(); // Clear previous data
+
+            appointments.forEach(function (appointment) {
+                let row = $('<tr>');
+
+                // Doctor Name, Animal Name, Specie, Breed
+                row.append(`<td class="text-center">${appointment.strDoctorFName} ${appointment.strDoctorLName}</td>`);
+                row.append(`<td class="text-center">${appointment.strSpecie}</td>`);
+                row.append(`<td class="text-center">${appointment.strBreed}</td>`);
+                row.append(`<td class="text-center">${appointment.strUserFName} ${appointment.strUserLName}</td>`);
+
+                var dtFormattedAppointment = formatJsonDate(appointment.dtAppointmentDate);
+
+                // Appointment Date (editable if status is "Pending")  Pending == 0
+                let dateColumn = appointment.enumStatus === 0
+                    ? `<input type="date" class="form-control" value="${dtFormattedAppointment}" onchange="changeAppointmentDate('${appointment.iAppointmentId}', this.value)">`
+                    : dtFormattedAppointment;
+                row.append(`<td class="text-center">${dateColumn}</td>`);
+
+                // Status
+                console.log('appointment Status: ' + appointment.enumStatus);
+                if (appointment.enumStatus == 0) {
+                    row.append(`<td class="text-center">Pending</td>`);
+                } else if (appointment.enumStatus == 1) {
+                    row.append(`<td class="text-center">Confirmed</td>`);
+                } else if (appointment.enumStatus == 2) {
+                    row.append(`<td class="text-center">Canceled</td>`);
+                } else if (appointment.enumStatus == 3) {
+                    row.append(`<td class="text-center">Missed</td>`);
+                } else if (appointment.enumStatus == 4) {
+                    row.append(`<td class="text-center">Completed</td>`);
+                }
+
+                //  Action buttons
+                let actions;
+                if (appointment.enumStatus == 0) {
+                    actions = `
+                        <button class="btn btn-outline-success" onclick="approveAppointment('${appointment.iAppointmentId}')">Approve</button>
+                        <button class="btn btn-outline-danger" onclick="rejectAppointment('${appointment.iAppointmentId}')">Reject</button>`;
+                } else if (appointment.enumStatus == 1) {
+                    actions = `
+                        <button class="btn btn-outline-info" onclick="diagnosisAppointment('${appointment.iAppointmentId}')">Diagnosis</button>
+                        <button class="btn btn-outline-warning" onclick="missedAppointment('${appointment.iAppointmentId}')">Missed</button>`;
+                } else {
+                    actions = `<span>Nothing</span>`;
+                }
+                row.append(`<td class="text-center">${actions}</td>`);
+
+                // Append row to the table body
+                tableBody.append(row);
+            });
+        }
+
+        function changeAppointmentDate(appointmentId, newDate) {
+            //$.ajax({
+            //    type: "POST",
+            //    url: "YourWebService.asmx/UpdateAppointmentDate", // Update with actual method URL
+            //    data: JSON.stringify({ id: appointmentId, date: newDate }),
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (response) {
+            //        console.log("Date updated successfully");
+            //    },
+            //    error: function (err) {
+            //        console.error("Error updating date: ", err);
+            //    }
+            //});
+        }
+
+        function approveAppointment(appointmentId) { 
+            $.ajax({
+                type: "POST",
+                url: "Dashboard.aspx/ApproveAppointment",
+                data: JSON.stringify({ id: appointmentId }),
+                contentType: "application/json;",
+                dataType: "json",
+                success: function (response) {
+                    if (response.d) {
+                        loadAppointments(); // Reload table after approval
+                    } else {
+                        alert('There is some issue in completing your request..!')
+                    }
+                },
+                failure: function (response) {
+                    console.error("Error approving appointment: ", response.d);
+                }
+            });
+        }
+
+        function rejectAppointment(appointmentId) {
+            $.ajax({
+                type: "POST",
+                url: "Dashboard.aspx/RejectAppointment",
+                data: JSON.stringify({ id: appointmentId }),
+                contentType: "application/json;",
+                dataType: "json",
+                success: function (response) {
+                    if (response.d) {
+                        loadAppointments(); // Reload table after approval
+                    } else {
+                        alert('There is some issue in completing your request..!')
+                    }
+                },
+                failure: function (response) {
+                    console.error("Error approving appointment: ", response.d);
+                }
+            });
+        }
+
+        function diagnosisAppointment(appointmentId) {
+            console.log("Diagnosis action for appointment ID: " + appointmentId);
+            // Handle diagnosis functionality here, e.g., redirect or update status
+        }
+
+        // Function for missed appointment
+        function missedAppointment(appointmentId) {
+            console.log("Missed action for appointment ID: " + appointmentId);
+            // Handle missed functionality here, e.g., update status or log event
+        }
+        function formatJsonDate(jsonDateString) {
+            var timestamp = parseInt(jsonDateString.replace(/\/Date\((\d+)\)\//, '$1'));
+            var date = new Date(timestamp);
+
+            // Format the date to 'yyyy-MM-dd'
+            var year = date.getFullYear();
+            var month = ("0" + (date.getMonth() + 1)).slice(-2);  // Add leading 0 to month if needed
+            var day = ("0" + date.getDate()).slice(-2);            // Add leading 0 to day if needed
+
+            return `${year}-${month}-${day}`;  // Return formatted date string
         }
 
         //$('#permission_link').css('display', 'none');
@@ -162,6 +339,13 @@
                 alert(response.d);
             }
         });
+
+        $(document).ready(function () {
+            loadAppointments();
+            $('#appointmentTable').DataTable();
+        });
+
+
 
     </script>
 

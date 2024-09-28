@@ -9,7 +9,10 @@ namespace Veterinary_System.Classes
     {
         public int iPermissionId { get; set; }
         public int iUserId { get; set; }
+        public string strCompounderFName { get; set; }
+        public string strCompounderLName { get; set; }
         public bool bDashboard { get; set; }
+        public bool bDiagnosis { get; set; }
         public bool bPermission { get; set; }
         public bool bBilling { get; set; }
     }

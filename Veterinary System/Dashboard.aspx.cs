@@ -24,17 +24,17 @@ namespace Veterinary_System.Doctor
                 string strName = txtName.Text.ToString().Trim();
                 string strEmail = txtEmail.Text.ToString().Trim();
 
-                int iResult = objUserADO.AddCompunder(strName, strEmail, Constants.objUser.iHospitalId);
+                int iResult = objUserADO.AddCompounder(strName, strEmail, Constants.objUser.iHospitalId);
 
                 if (iResult > 0)
                 {
                     //added
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", "alert('New Compounder Added.');");
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('New Compounder Added.');", true);
                 }
                 else
                 {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", "alert('Database error, Please try after some time..!');");
                     //not added, DB error maybee vroo
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Database error, Please try after some time..!');", true);
                 }
             }
         }
@@ -60,6 +60,33 @@ namespace Veterinary_System.Doctor
             int iResult = objUserADO.AddDoctor(strName, strEmail, Constants.objUser.iHospitalId);
 
             return iResult;
+        }
+
+        [WebMethod]
+        public static List<AppointmentForDoctor> GetAppointments()
+        {
+            AppointmentADO objAppointmentADO = new AppointmentADO();
+            List<AppointmentForDoctor> lstAppointmentForDoctors = objAppointmentADO.GetAppointments(Constants.objUser.iHospitalId);
+
+            return lstAppointmentForDoctors;
+        }
+
+        [WebMethod]
+        public static bool ApproveAppointment(int id)
+        {
+            AppointmentADO objAppointmentADO = new AppointmentADO();
+            bool bResult = objAppointmentADO.ApproveAppointment(id);
+
+            return bResult;
+        }
+
+        [WebMethod]
+        public static bool RejectAppointment(int id)
+        {
+            AppointmentADO objAppointmentADO = new AppointmentADO();
+            bool bResult = objAppointmentADO.RejectAppointment(id);
+
+            return bResult;
         }
     }
 }

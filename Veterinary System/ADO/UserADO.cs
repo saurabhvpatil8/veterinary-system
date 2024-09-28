@@ -58,7 +58,7 @@ namespace Veterinary_System.ADO
             }
         }
 
-        public int AddCompunder(string name, string email, int? hospitalId)
+        public int AddCompounder(string name, string email, int? hospitalId)
         {
             try
             {
@@ -69,14 +69,15 @@ namespace Veterinary_System.ADO
                         objDBConfig.Database.Open();
 
                     //insert into user table
-                    string strPassword = name + "@123";
+                    string strPassword = name.Replace(" ", "") + "@123";
+
                     string strQuery = "INSERT INTO users (fname, email, password, user_type, hospital_id) VALUES (@fname, @email, @password, @user_type, @hospital_id); select LAST_INSERT_ID();";
                     MySqlCommand sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
 
                     sqlCommand.Parameters.AddWithValue("@fname", name);
                     sqlCommand.Parameters.AddWithValue("@email", email);
                     sqlCommand.Parameters.AddWithValue("@password", strPassword);
-                    sqlCommand.Parameters.AddWithValue("@user_type", "Compunder");
+                    sqlCommand.Parameters.AddWithValue("@user_type", "Compounder");
                     sqlCommand.Parameters.AddWithValue("@hospital_id", hospitalId);
 
                     int iUserId = Convert.ToInt32(sqlCommand.ExecuteScalar());
@@ -158,6 +159,7 @@ namespace Veterinary_System.ADO
                                 iUserId = (int)data["user_id"],
                                 bDashboard = (int)data["dashboard"] == 0 ? false : true,
                                 bPermission = (int)data["permission"] == 0 ? false : true,
+                                bDiagnosis = (int)data["diagnosis"] == 0 ? false : true,
                                 bBilling = (int)data["billing"] == 0 ? false : true
                             };
                         }

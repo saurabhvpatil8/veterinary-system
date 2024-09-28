@@ -10,50 +10,59 @@ namespace Veterinary_System.Classes
 {
     public class Constants
     {
-        public static User objUser
-        {
-            get
-            { return (User)HttpContext.Current.Session["User"]; }
-            set
-            { HttpContext.Current.Session["User"] = value; }
-        }
-        public static Permission objPermission
-        {
-            get
-            { return (Permission)HttpContext.Current.Session["Permission"]; }
-            set
-            { HttpContext.Current.Session["Permission"] = value; }
-        }
-        public static AnimalData objAnimalData
-        {
-            get
-            { return (AnimalData)HttpContext.Current.Session["AnimalData"]; }
-            set
-            { HttpContext.Current.Session["AnimalData"] = value; }
-        }
-        public static Hospital objHospital
-        {
-            get
-            { return (Hospital)HttpContext.Current.Session["Hospital"]; }
-            set
-            { HttpContext.Current.Session["Hospital"] = value; }
-        }
 
-        public static CountryData objCountryData
-        {
-            get
-            { return (CountryData)HttpContext.Current.Session["CountryData"]; }
-            set
-            { HttpContext.Current.Session["CountryData"] = value; }
-        }
+        public static User objUser { get; set; }
+        //public static User objUser
+        //{
 
-        public static List<HospitalsWithDoctors> lstHospitalsWithDoctors
-        {
-            get
-            { return (List<HospitalsWithDoctors>)HttpContext.Current.Session["HospitalsWithDoctors"]; }
-            set
-            { HttpContext.Current.Session["HospitalsWithDoctors"] = value; }
-        }
+
+        //    get
+        //    { return (User)HttpContext.Current.Session["User"]; }
+        //    set
+        //    { HttpContext.Current.Session["User"] = value; }
+        //}
+        public static Permission objPermission { get; set; }
+        //public static Permission objPermission
+        //{
+        //    get
+        //    { return (Permission)HttpContext.Current.Session["Permission"]; }
+        //    set
+        //    { HttpContext.Current.Session["Permission"] = value; }
+        //}
+        public static AnimalData objAnimalData { get; set; }
+        //public static AnimalData objAnimalData
+        //{
+        //    get
+        //    { return (AnimalData)HttpContext.Current.Session["AnimalData"]; }
+        //    set
+        //    { HttpContext.Current.Session["AnimalData"] = value; }
+        //}
+        public static Hospital objHospital { get; set; }
+        //public static Hospital objHospital
+        //{
+        //    get
+        //    { return (Hospital)HttpContext.Current.Session["Hospital"]; }
+        //    set
+        //    { HttpContext.Current.Session["Hospital"] = value; }
+        //}
+
+        public static CountryData objCountryData { get; set; }
+        //public static CountryData objCountryData
+        //{
+        //    get
+        //    { return (CountryData)HttpContext.Current.Session["CountryData"]; }
+        //    set
+        //    { HttpContext.Current.Session["CountryData"] = value; }
+        //}
+
+        public static List<HospitalsWithDoctors> lstHospitalsWithDoctors { get; set; }
+        //public static List<HospitalsWithDoctors> lstHospitalsWithDoctors
+        //{
+        //    get
+        //    { return (List<HospitalsWithDoctors>)HttpContext.Current.Session["HospitalsWithDoctors"]; }
+        //    set
+        //    { HttpContext.Current.Session["HospitalsWithDoctors"] = value; }
+        //}
 
         public static void OnLoad()
         {

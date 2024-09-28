@@ -5,7 +5,6 @@
         .outlinee {
             border: 2px solid #d2d6da;
             padding: 8px 9px 6.5px 9px;
-            /*padding: 5px 6px 3.5px 6px;*/
         }
 
             .outlinee:focus {
@@ -172,20 +171,22 @@
                     $('#txtAddress').val(response.d.strAddress)
 
                     user_type = response.d.strUserType;
+                    console.log("user_type: " + user_type);
                     if (user_type == 'User') {
-                        document.getElementById('vet_dashboard').style.display = 'none';
                         document.getElementById('specialization_div').style.visibility = 'hidden';
-
                     } else {
-                        document.getElementById('user_dashboard').style.display = 'none';
-
-                        if (user_type == 'Compunder') {
+                        if (user_type == 'Compounder') {
                             document.getElementById('specialization_div').style.visibility = 'hidden';
                         } else {
                             document.getElementById('specialization_div').style.visibility = 'visible';
                         }
                     }
 
+                    if (user_type != 'Doctor') {
+                        document.getElementById('hospital_details').style.display = 'none';
+                    } else {
+                        document.getElementById('hospital_details').style.display = 'block';
+                    }
                 },
                 error: function (error) {
                     console.log(error);
@@ -287,17 +288,6 @@
             fillUpCitiesDropDown(selectedState, drpCity);
         });
 
-
-        $(window).on("load", function () {
-
-            console.log("user_type: " + user_type);
-            if (user_type != 'Doctor') {
-                document.getElementById('hospital_details').style.display = 'none';
-            } else {
-                document.getElementById('hospital_details').style.display = 'block';
-            }
-
-        });
         /*$(document).ready(function () {          });*/
 
         function btnUpdateProfile() {

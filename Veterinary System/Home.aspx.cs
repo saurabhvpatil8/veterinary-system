@@ -62,7 +62,7 @@ namespace Veterinary_System
             objAnimal.iUserId = Constants.objUser.iUserId;
             Random rand = new Random();
             objAnimal.strAnimalNumber = DateTime.Now.ToString("ssHHddMMyy" + rand.Next(10, 99));
-             
+
             ADO.AnimalADO AnimalADO = new ADO.AnimalADO();
             return AnimalADO.AddNewPet(objAnimal);
         }
@@ -83,6 +83,23 @@ namespace Veterinary_System
 
             return lstHospitalsWithDoctors.Where(x => x.objHospital.strState == strState && x.objHospital.strCity == strCity).ToList();
         }
+
+        [WebMethod]
+        public static string AddAppointment(int doctorId, int animalId, DateTime dtAppointmentDate)
+        {
+            AppointmentADO appointmentADO = new AppointmentADO();
+            int iResult = appointmentADO.AddAppointment(doctorId, animalId, dtAppointmentDate);
+
+            if (iResult > 0)
+            {
+                return "Appointment added successfully. check your email for schedule update.";
+            }
+            else
+            {
+                return "There is some problem in generating your appointment request, please schedule after some time..!";
+            }
+        }
+
 
     }
 }

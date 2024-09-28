@@ -61,7 +61,7 @@
                         <span class="nav-link-text ms-1">Permissions</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" id="doctor_billing">
                     <a class="nav-link text-white" id="billing_link" href="Billing.aspx">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">receipt_long</i>
@@ -132,6 +132,83 @@
                 damping: '0.5'
             }
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+
+    <script>
+        var user_type = null;
+
+        //if (user_type == null) {
+        //    user_type = 'Doctor';
+        //    alert('if: ' + user_type)
+        //} else {
+        //    alert('else: ' + user_type)
+
+        //}
+        loadUserType();
+        function loadUserType() {
+            $.ajax({
+                type: "POST",
+                url: "Profile.aspx/GetUserType",  // Update this URL to your .NET method
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    user_type = response.d;
+                    if (response.d == 'Doctor') {
+                        document.getElementById('user_dashboard').style.display = 'none';
+                    } else if (response.d == 'Compounder') {
+                        document.getElementById('user_dashboard').style.display = 'none';
+                    } else {
+                        document.getElementById('vet_dashboard').style.display = 'none';
+                    }
+                },
+                error: function (err) {
+                    console.error("Error fetching permissions: ", err);
+                }
+            });
+
+            if (user_type != 'User') {
+                $.ajax({
+                    type: "POST",
+                    url: "Permissions.aspx/GetLoggedUserPermission",  // Update this URL to your .NET method
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.d != null) {
+                            if (response.d.bDashboard) {
+                                document.getElementById('doctor_dashboard').style.display = 'block';
+                            } else {
+                                document.getElementById('doctor_dashboard').style.display = 'none';
+                            }
+
+                            if (response.d.bDiagnosis) {
+                                document.getElementById('doctor_diagnosis').style.display = 'block';
+                            } else {
+                                document.getElementById('doctor_diagnosis').style.display = 'none';
+                            }
+
+                            if (response.d.bPermission) {
+                                document.getElementById('doctor_permissions').style.display = 'block';
+                            } else {
+                                document.getElementById('doctor_permissions').style.display = 'none';
+                            }
+
+                            if (response.d.bBilling) {
+                                document.getElementById('doctor_billing').style.display = 'block';
+                            } else {
+                                document.getElementById('doctor_billing').style.display = 'none';
+                            }
+                        } else {
+                            alert('There is some problem..!')
+                        }
+                    },
+                    error: function (err) {
+                        console.error("Error fetching permissions: ", err);
+                    }
+                });
+            }
+
+
         }
     </script>
 

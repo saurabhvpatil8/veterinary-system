@@ -31,12 +31,39 @@ namespace Veterinary_System
 
                 UserADO objUserADO = new UserADO();
                 User objUser = objUserADO.CheckUser(strEmail, strPassword);
+
+                PermissionsADO permissionsADO = new PermissionsADO();
+                Permission objPermission = permissionsADO.GetPermissionsById(objUser.iUserId);
+
                 if (objUser != null)
                 {
-                    if (Constants.objUser.iHospitalId != null)
-                        Response.Redirect("Dashboard.aspx");
-                    else
+                    if (objUser.strUserType == "User")
+                    {
                         Response.Redirect("Home.aspx");
+                    }
+                    else
+                    {
+                        if (objPermission.bDashboard)
+                        {
+                            Response.Redirect("Dashboard.aspx");
+                        }
+                        else if (objPermission.bDiagnosis)
+                        {
+                            Response.Redirect("Diagnosis.aspx");
+                        }
+                        else if (objPermission.bPermission)
+                        {
+                            Response.Redirect("Permissions.aspx");
+                        }
+                        else if (objPermission.bBilling)
+                        {
+                            Response.Redirect("Billing.aspx");
+                        }
+                        else
+                        {
+                            Response.Redirect("Profile.aspx");
+                        }
+                    }
                 }
                 else
                 {

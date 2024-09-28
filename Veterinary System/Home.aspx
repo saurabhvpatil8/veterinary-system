@@ -249,7 +249,7 @@
     <%--<script src="/assets/js/plugins/flatpickr.min.js"></script>--%>
     <script>
         document.getElementById("home_link").classList.add('bg-gradient-primary');
-        document.getElementById('vet_dashboard').style.display = 'none';
+        //document.getElementById('vet_dashboard').style.display = 'none';
 
         var submit = false;
         var petId = 0;
@@ -372,11 +372,22 @@
                     container.empty();
 
                     animals.forEach(function (animal) {
+                        var animalImage = '';
+
+                        if (animal.strSpecie === 'Cow') {
+                            animalImage = `<img src="assets/img/animals/cow.jpeg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                        } else if (animal.strSpecie === 'Dog') {
+                            animalImage = `<img src="assets/img/animals/dog.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                        } else if (animal.strSpecie === 'Cat') {
+                            animalImage = `<img src="assets/img/animals/cat.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                        } else {
+                            animalImage = `<img src="assets/img/animals/default.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                        }
                         var animalHtml = `
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <div class="pet-image">
-                                    <img src="assets/img/animals/dogs1.jpg" width="350px" height="200px" />
+                                    ${animalImage}
                                 </div>
                                 <button class="btn btn-outline-secondary btn-custom" onclick="editAnimal(${animal.iAnimalId})">Edit</button>
                                 <button class="btn btn-outline-secondary btn-custom">See Past Records</button>
@@ -450,23 +461,27 @@
         }
 
         function bookAppointment(doctorId) {
-            alert('DoctorID : ' + doctorId + ', PetId : ' + petId);
+            var dtAppointment = document.getElementById(`date_${doctorId}`).value;
 
-            $.ajax({
-                type: "POST",
-                url: "Home.aspx/GetHospitalWithDoctors",
-                data: JSON.stringify({ strState: state, strCity: city }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
+            console.log('DoctorID : ' + doctorId + ', PetId : ' + petId + ', Date : ' + dtAppointment);
 
-
-
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+            if (dtAppointment != null && dtAppointment != '') {
+                $.ajax({
+                    type: "POST",
+                    url: "Home.aspx/AddAppointment",
+                    data: JSON.stringify({ doctorId: doctorId, animalId: petId, dtAppointmentDate: dtAppointment }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        alert(response.d)
+                    },
+                    error: function (error) {
+                        console.log('Error: ' + error);
+                    }
+                });
+            } else {
+                alert('Please select date of Appointment..!');
+            }
 
 
         }
