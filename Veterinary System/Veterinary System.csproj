@@ -126,9 +126,13 @@
     <Content Include="assets\css\nucleo-icons.css" />
     <Content Include="assets\css\nucleo-svg.css" />
     <Content Include="assets\fonts\nucleo-icons.svg" />
+    <Content Include="assets\img\animals\Buffalo.jpg" />
     <Content Include="assets\img\animals\cat.jpg" />
     <Content Include="assets\img\animals\cow.jpeg" />
+    <Content Include="assets\img\animals\default.jpg" />
     <Content Include="assets\img\animals\dog.jpg" />
+    <Content Include="assets\img\animals\Horse.jpg" />
+    <Content Include="assets\img\animals\Ox.jpg" />
     <Content Include="assets\img\apple-icon.png" />
     <Content Include="assets\img\bg-pricing.jpg" />
     <Content Include="assets\img\bg-smart-home-1.jpg" />
@@ -240,6 +244,7 @@
     <Compile Include="ADO\AnimalADO.cs" />
     <Compile Include="ADO\AppointmentADO.cs" />
     <Compile Include="ADO\DBConfig.cs" />
+    <Compile Include="ADO\DiagnosisADO.cs" />
     <Compile Include="ADO\HospitalsADO.cs" />
     <Compile Include="ADO\PermissionsADO.cs" />
     <Compile Include="ADO\UserADO.cs" />
@@ -254,9 +259,7 @@
     <Compile Include="Classes\Appointment.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\Diagnoses.cs" />
-    <Compile Include="Classes\EmailSender.cs" />
     <Compile Include="Classes\Hospital.cs" />
-    <Compile Include="Classes\IEmailSender.cs" />
     <Compile Include="Classes\Permission.cs" />
     <Compile Include="Classes\User.cs" />
     <Compile Include="Dashboard.Master.cs">

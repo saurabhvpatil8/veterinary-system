@@ -17,6 +17,13 @@ namespace Veterinary_System
         {
             if (!Page.IsPostBack)
             {
+                Constants.objUser = null;
+                Constants.objPermission = null;
+                Constants.objAnimalData = null;
+                Constants.objHospital = null;
+                Constants.objCountryData = null;
+                Constants.lstHospitalsWithDoctors = null;
+                
                 Constants.OnLoad();
             }
 
@@ -32,11 +39,11 @@ namespace Veterinary_System
                 UserADO objUserADO = new UserADO();
                 User objUser = objUserADO.CheckUser(strEmail, strPassword);
 
-                PermissionsADO permissionsADO = new PermissionsADO();
-                Permission objPermission = permissionsADO.GetPermissionsById(objUser.iUserId);
-
                 if (objUser != null)
                 {
+                    PermissionsADO permissionsADO = new PermissionsADO();
+                    Permission objPermission = permissionsADO.GetPermissionsById(objUser.iUserId);
+
                     if (objUser.strUserType == "User")
                     {
                         Response.Redirect("Home.aspx");
@@ -67,13 +74,13 @@ namespace Veterinary_System
                 }
                 else
                 {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Wrong email or password..!');", true);
                     // invalid user credentials (email or password is wrong)
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", "alert('Wrong email or password..!');");
                 }
             }
             else
             {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "myscript", "alert('Please enter proper email or password..!');");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", "alert('Please enter proper email or password..!');", true);
                 //not null validations
             }
 

@@ -23,7 +23,7 @@ namespace Veterinary_System.ADO
                     if (objDBConfig.Database.State == ConnectionState.Closed)
                         objDBConfig.Database.Open();
 
-                    string strQuery = "SELECT permission.*, users.fname, users.lname FROM permission JOIN users ON permission.user_id = users.user_id WHERE users.user_type = 'Compounder'; ";
+                    string strQuery = "SELECT permission.*, users.fname, users.lname FROM permission JOIN users ON permission.user_id = users.user_id JOIN hospitals ON hospitals.hospital_id = users.hospital_id WHERE users.user_type = 'Compounder' and users.hospital_id = " + iHospitalId + "; ";
 
                     MySqlCommand command = new MySqlCommand(strQuery, objDBConfig.Database);
                     MySqlDataAdapter dataAdapter = new MySqlDataAdapter(command);

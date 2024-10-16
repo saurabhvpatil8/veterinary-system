@@ -18,6 +18,12 @@ namespace Veterinary_System.Classes
         public DateTime dtBirthDate { get; set; }
         public string strDescription { get; set; }
     }
+
+    public class AnimalWithOwner
+    {
+        public Animal objAnimal { get; set; }
+        public User objUser { get; set; }
+    }
     public class AnimalData
     {
         public List<Species> species { get; set; }

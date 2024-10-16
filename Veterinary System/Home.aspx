@@ -1,8 +1,6 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="Home.aspx.cs" EnableEventValidation="false" Inherits="Veterinary_System.Home" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <%-- <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>--%>
     <style>
         .pet-image {
             width: 100%;
@@ -21,7 +19,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
-        <div class="container-fluid py-1 px-3">
+        <div class="container-fluid ">
             <nav aria-label="breadcrumb">
                 <h6 class="font-weight-bolder mb-0">User Dashboard</h6>
             </nav>
@@ -39,7 +37,7 @@
     </nav>
     <!-- End Navbar -->
 
-    <div class="container-fluid py-4 m-2">
+    <div class="container-fluid m-2">
         <div class="row">
             <div class="col-12">
                 <h4>Pet Details</h4>
@@ -47,7 +45,7 @@
         </div>
 
         <div class="row" id="divAnimalsContainer">
-            <div class="col-md-4">
+            <%--<div class="col-md-4">
                 <div class="pet-image">
                     <img src="assets/img/animals/dogs1.jpg" width="350px" height="200px" />
                 </div>
@@ -88,7 +86,7 @@
                     </div>
                 </div>
                 <button class="btn btn-primary btn-custom">Book Appointment</button>
-            </div>
+            </div>--%>
         </div>
     </div>
 
@@ -245,8 +243,7 @@
         </div>
     </div>
 
-    <%--<script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>--%>
-    <%--<script src="/assets/js/plugins/flatpickr.min.js"></script>--%>
+
     <script>
         document.getElementById("home_link").classList.add('bg-gradient-primary');
         //document.getElementById('vet_dashboard').style.display = 'none';
@@ -371,19 +368,26 @@
                     var container = $('#divAnimalsContainer');
                     container.empty();
 
-                    animals.forEach(function (animal) {
-                        var animalImage = '';
+                    if (animals.length != 0) {
+                        animals.forEach(function (animal) {
+                            var animalImage = '';
 
-                        if (animal.strSpecie === 'Cow') {
-                            animalImage = `<img src="assets/img/animals/cow.jpeg" style="border-radius: 10px;" width="350px" height="200px" />`;
-                        } else if (animal.strSpecie === 'Dog') {
-                            animalImage = `<img src="assets/img/animals/dog.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
-                        } else if (animal.strSpecie === 'Cat') {
-                            animalImage = `<img src="assets/img/animals/cat.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
-                        } else {
-                            animalImage = `<img src="assets/img/animals/default.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
-                        }
-                        var animalHtml = `
+                            if (animal.strSpecie === 'Cow') {
+                                animalImage = `<img src="assets/img/animals/cow.jpeg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                            } else if (animal.strSpecie === 'Dog') {
+                                animalImage = `<img src="assets/img/animals/dog.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                            } else if (animal.strSpecie === 'Cat') {
+                                animalImage = `<img src="assets/img/animals/cat.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                            } else if (animal.strSpecie === 'Buffalo') {
+                                animalImage = `<img src="assets/img/animals/Buffalo.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                            } else if (animal.strSpecie === 'Horse') {
+                                animalImage = `<img src="assets/img/animals/Horse.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                            } else if (animal.strSpecie === 'Ox') {
+                                animalImage = `<img src="assets/img/animals/Ox.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                            } else {
+                                animalImage = `<img src="assets/img/animals/default.jpg" style="border-radius: 10px;" width="350px" height="200px" />`;
+                            }
+                            var animalHtml = `
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <div class="pet-image">
@@ -431,8 +435,15 @@
                             </div>
                         </div>`;
 
-                        container.append(animalHtml);
-                    });
+                            container.append(animalHtml);
+                        });
+                    } else {
+                        var container = $('#divAnimalsContainer');
+                        container.empty();
+                        var empty1 = `<div class="row mb-3"><div class="col-md-4"><p>You have not added any pet yet</p></div></div>`;
+
+                        container.append(empty1);
+                    }
 
                 },
                 error: function (error) {
@@ -473,7 +484,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (response) {
-                        alert(response.d)
+                        alert(response.d);
                     },
                     error: function (error) {
                         console.log('Error: ' + error);
@@ -508,10 +519,10 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-
                     if (response.d == true) {
                         alert('New Pet Added Successfully')
                         $('#ModalAddPet').modal('hide');
+                        GetAnimals();
                     } else {
                         alert('There is some problem in adding your pet, please try after some time..!')
                     }

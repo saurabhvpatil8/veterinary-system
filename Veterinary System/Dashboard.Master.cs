@@ -13,7 +13,10 @@ namespace Veterinary_System
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            //txtHospitalId.Text = Constants.iHospitalId.ToString();
+            if (Constants.objUser == null)
+            {
+                Response.Redirect("SignIn.aspx");
+            }
         }
     }
 }

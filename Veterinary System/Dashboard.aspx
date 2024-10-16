@@ -1,9 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Dashboard.Master" AutoEventWireup="true" CodeBehind="Dashboard.aspx.cs" Inherits="Veterinary_System.Doctor.Dashboard" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<%--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>--%>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="Stylesheet" />
+
     <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css" />
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <%--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--%>
+    <%--<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>--%>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -16,9 +24,9 @@
                 <div class="ms-md-auto pe-md-3 d-flex align-items-center"></div>
                 <ul class="navbar-nav  justify-content-end">
                     <li class="nav-item d-flex align-items-center">
-                        <button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#ModalAddDoctor">
+                        <%--<button type="button" class="btn bg-gradient-primary" data-bs-toggle="modal" data-bs-target="#ModalAddDoctor">
                             Add Doctor
-                        </button>
+                        </button>--%>
                     </li>
                     <li>&nbsp; &nbsp;</li>
                     <li class="nav-item d-flex align-items-center">
@@ -34,7 +42,7 @@
     <div class="container-fluid py-4">
         <div class="row">
             <h2>Appointments</h2>
-            <table id="appointmentTable" class="table table-striped text-center mb-0">
+            <table id="appointmentTable" class="table table-bordered border-2 text-center mb-0" data-toggle="table">
                 <thead>
                     <tr>
                         <th scope="col" class="text-center">Doctor Name</th>
@@ -116,6 +124,10 @@
         </div>
     </div>
 
+
+    <%--  --%>
+    <%--<script type="text/javascript" src="js/datatables.min.js"></script>--%>
+    <script type="text/javascript" src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script>
         const itemsPerPage = 3; // Change this value to display more/less rows per page
         let currentPage = 1;
@@ -224,6 +236,14 @@
                 // Append row to the table body
                 tableBody.append(row);
             });
+
+            $('#appointmentTable').DataTable({
+                drawCallback: function (settings) {
+                    // Call the function to populate user options whenever the table is redrawn
+                    //oneTo();
+                }
+            });
+            //appointmentTable
         }
 
         function changeAppointmentDate(appointmentId, newDate) {
@@ -342,7 +362,7 @@
 
         $(document).ready(function () {
             loadAppointments();
-            $('#appointmentTable').DataTable();
+            //$('#appointmentTable').DataTable();
         });
 
 

@@ -70,11 +70,12 @@ namespace Veterinary_System
                         int iUserId = Convert.ToInt32(sqlCommand.ExecuteScalar());
 
                         //insert into permission table
-                        strQuery = "INSERT INTO permission (user_id, dashboard, permission, billing) VALUES (@user_id, @dashboard, @permission, @billing);";
+                        strQuery = "INSERT INTO permission (user_id, dashboard, diagnosis, permission, billing) VALUES (@user_id, @dashboard, @diagnosis, @permission, @billing);";
                         sqlCommand = new MySqlCommand(strQuery, objDBConfig.Database);
 
                         sqlCommand.Parameters.AddWithValue("@user_id", iUserId);
                         sqlCommand.Parameters.AddWithValue("@dashboard", 1);
+                        sqlCommand.Parameters.AddWithValue("@diagnosis", 1);
                         sqlCommand.Parameters.AddWithValue("@permission", 1);
                         sqlCommand.Parameters.AddWithValue("@billing", 1);
 

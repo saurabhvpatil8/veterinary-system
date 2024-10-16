@@ -103,7 +103,7 @@
         <div class="sidenav-footer position-absolute w-100 bottom-1 ">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link text-white " href="SignIn.aspx">
+                    <a class="nav-link text-white" href="SignIn.aspx">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i class="material-icons opacity-10">login</i>
                         </div>
@@ -161,52 +161,53 @@
                     } else {
                         document.getElementById('vet_dashboard').style.display = 'none';
                     }
+
+                    console.log(user_type)
+                    if (user_type != 'User') {
+                        $.ajax({
+                            type: "POST",
+                            url: "Permissions.aspx/GetLoggedUserPermission",  // Update this URL to your .NET method
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.d != null) {
+                                    if (response.d.bDashboard) {
+                                        document.getElementById('doctor_dashboard').style.display = 'block';
+                                    } else {
+                                        document.getElementById('doctor_dashboard').style.display = 'none';
+                                    }
+
+                                    if (response.d.bDiagnosis) {
+                                        document.getElementById('doctor_diagnosis').style.display = 'block';
+                                    } else {
+                                        document.getElementById('doctor_diagnosis').style.display = 'none';
+                                    }
+
+                                    if (response.d.bPermission) {
+                                        document.getElementById('doctor_permissions').style.display = 'block';
+                                    } else {
+                                        document.getElementById('doctor_permissions').style.display = 'none';
+                                    }
+
+                                    if (response.d.bBilling) {
+                                        document.getElementById('doctor_billing').style.display = 'block';
+                                    } else {
+                                        document.getElementById('doctor_billing').style.display = 'none';
+                                    }
+                                } else {
+                                    alert('There is some problem..!')
+                                }
+                            },
+                            error: function (err) {
+                                console.error("Error fetching permissions: ", err);
+                            }
+                        });
+                    }
                 },
                 error: function (err) {
                     console.error("Error fetching permissions: ", err);
                 }
             });
-
-            if (user_type != 'User') {
-                $.ajax({
-                    type: "POST",
-                    url: "Permissions.aspx/GetLoggedUserPermission",  // Update this URL to your .NET method
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.d != null) {
-                            if (response.d.bDashboard) {
-                                document.getElementById('doctor_dashboard').style.display = 'block';
-                            } else {
-                                document.getElementById('doctor_dashboard').style.display = 'none';
-                            }
-
-                            if (response.d.bDiagnosis) {
-                                document.getElementById('doctor_diagnosis').style.display = 'block';
-                            } else {
-                                document.getElementById('doctor_diagnosis').style.display = 'none';
-                            }
-
-                            if (response.d.bPermission) {
-                                document.getElementById('doctor_permissions').style.display = 'block';
-                            } else {
-                                document.getElementById('doctor_permissions').style.display = 'none';
-                            }
-
-                            if (response.d.bBilling) {
-                                document.getElementById('doctor_billing').style.display = 'block';
-                            } else {
-                                document.getElementById('doctor_billing').style.display = 'none';
-                            }
-                        } else {
-                            alert('There is some problem..!')
-                        }
-                    },
-                    error: function (err) {
-                        console.error("Error fetching permissions: ", err);
-                    }
-                });
-            }
 
 
         }

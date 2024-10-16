@@ -162,16 +162,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    $('#txtFirstName').val(response.d.strFName)
-                    $('#txtLastName').val(response.d.strLName)
-                    $('#txtEmail').val(response.d.strEmail)
-                    $('#txtPhoneNumber').val(response.d.strPhoneNo)
-                    $('#txtUserType').val(response.d.strUserType)
-                    $('#txtSpecialization').val(response.d.strSpecialization)
-                    $('#txtAddress').val(response.d.strAddress)
-
                     user_type = response.d.strUserType;
-                    console.log("user_type: " + user_type);
                     if (user_type == 'User') {
                         document.getElementById('specialization_div').style.visibility = 'hidden';
                     } else {
@@ -182,41 +173,89 @@
                         }
                     }
 
+                    $('#txtFirstName').val(response.d.strFName)
+                    $('#txtLastName').val(response.d.strLName)
+                    $('#txtEmail').val(response.d.strEmail)
+                    $('#txtPhoneNumber').val(response.d.strPhoneNo)
+                    $('#txtUserType').val(response.d.strUserType)
+                    $('#txtSpecialization').val(response.d.strSpecialization)
+                    $('#txtAddress').val(response.d.strAddress)
+                    console.log('State bc: ' + response.d.strState)
+                    $('#drpStateUser').val(response.d.strState)
+
+                    var stateVal1 = document.getElementById('drpStateUser');
+                    var drpCity1 = $('#drpCityUser');
+                    fillUpCitiesDropDown(stateVal1.value, drpCity1);
+                    
+                    console.log("user_type: " + user_type);
+                    console.log("city: " + response.d.strCity);
+
+                    $('#drpCityUser').val(response.d.strCity)
+                    //$('#drpCityUser').trigger('change');
+
                     if (user_type != 'Doctor') {
                         document.getElementById('hospital_details').style.display = 'none';
                     } else {
                         document.getElementById('hospital_details').style.display = 'block';
                     }
+
+                    if (user_type != 'User') {
+                        $.ajax({
+                            type: "POST",
+                            url: "Profile.aspx/GetHospitalData",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                $('#txtName').val(response.d.strName)
+                                $('#txtHospitalPhoneNumber').val(response.d.strPhoneNumber)
+                                $('#txtHospitalEmail').val(response.d.strEmail)
+                                //var hospital_type = response.d.strType;
+                                //alert(hospital_type)
+                                //if (hospital_type == 'Public') {
+                                //    $('#drpHospitalType').val(hospital_type)
+                                //}
+                                $('#drpHospitalType').val(response.d.strType)
+                                $('#drpState').val(response.d.strState)
+                                $('#drpCity').val(response.d.strCity)
+                                $('#txtHospitalAddress').val(response.d.strAddress)
+
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
 
-            $.ajax({
-                type: "POST",
-                url: "Profile.aspx/GetHospitalData",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    $('#txtName').val(response.d.strName)
-                    $('#txtHospitalPhoneNumber').val(response.d.strPhoneNumber)
-                    $('#txtHospitalEmail').val(response.d.strEmail)
-                    //var hospital_type = response.d.strType;
-                    //alert(hospital_type)
-                    //if (hospital_type == 'Public') {
-                    //    $('#drpHospitalType').val(hospital_type)
-                    //}
-                    $('#drpHospitalType').val(response.d.strType)
-                    $('#drpState').val(response.d.strState)
-                    $('#drpCity').val(response.d.strCity)
-                    $('#txtHospitalAddress').val(response.d.strAddress)
+            //$.ajax({
+            //    type: "POST",
+            //    url: "Profile.aspx/GetHospitalData",
+            //    contentType: "application/json; charset=utf-8",
+            //    dataType: "json",
+            //    success: function (response) {
+            //        $('#txtName').val(response.d.strName)
+            //        $('#txtHospitalPhoneNumber').val(response.d.strPhoneNumber)
+            //        $('#txtHospitalEmail').val(response.d.strEmail)
+            //        //var hospital_type = response.d.strType;
+            //        //alert(hospital_type)
+            //        //if (hospital_type == 'Public') {
+            //        //    $('#drpHospitalType').val(hospital_type)
+            //        //}
+            //        $('#drpHospitalType').val(response.d.strType)
+            //        $('#drpState').val(response.d.strState)
+            //        $('#drpCity').val(response.d.strCity)
+            //        $('#txtHospitalAddress').val(response.d.strAddress)
 
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+            //    },
+            //    error: function (error) {
+            //        console.log(error);
+            //    }
+            //});
 
         }
 
@@ -230,6 +269,7 @@
                     //User States-Cities Value fill up
                     var drpState = $('#drpStateUser');
                     drpState.empty();
+                    drpState.append($('<option></option>').val('choose state').text('choose state'));
                     $.each(response.d, function (index, value) {
                         drpState.append($('<option></option>').val(value).text(value));
                     });
@@ -241,6 +281,8 @@
                     //Hospital States - Cities Value fill up
                     drpState = $('#drpStateHospital');
                     drpState.empty();
+
+                    drpState.append($('<option></option>').val('choose state').text('choose state'));
                     $.each(response.d, function (index, value) {
                         drpState.append($('<option></option>').val(value).text(value));
                     });
@@ -266,6 +308,7 @@
                 success: function (response) {
                     drpCity.empty();
 
+                    drpCity.append($('<option></option>').val('choose city').text('choose city'));
                     $.each(response.d, function (index, value) {
                         drpCity.append($('<option></option>').val(value).text(value));
                     });
@@ -291,10 +334,6 @@
         /*$(document).ready(function () {          });*/
 
         function btnUpdateProfile() {
-            //if ($('#txtName').val() == null || $('#txtName').val() == '') {
-            //    alert('Enter your Pet name..!')
-            //    return;
-            //}
 
             var objUser = {
                 strFName: $('#txtFirstName').val(),
@@ -306,6 +345,8 @@
                 strSpecialization: $('#txtSpecialization').val(),
                 strAddress: $('#txtAddress').val()
             };
+
+            console.log(objUser);
 
             $.ajax({
                 type: "POST",

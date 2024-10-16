@@ -134,6 +134,8 @@ namespace Veterinary_System.ADO
                             strPassword = data["password"].ToString(),
                             iHospitalId = data["hospital_id"] != DBNull.Value ? (int)(data["hospital_id"]) : (int?)null,
                             strFName = data["fname"].ToString(),
+                            strState = data["state"].ToString(),
+                            strCity = data["city"].ToString(),
                             strLName = data["lname"].ToString(),
                             strPhoneNo = data["phone_no"].ToString(),
                             strSpecialization = data["specialization"].ToString(),
